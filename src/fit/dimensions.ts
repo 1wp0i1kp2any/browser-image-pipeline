@@ -152,13 +152,27 @@ const RESERVED_DIMENSION_NAMES = new Set([
 ]);
 const RESERVED_DIMENSION_OPTION_KEYS = new Set(['quality', 'channel', 'subsampling']);
 
+/**
+ * Похож ли value на объект опций энкодера (не null и не массив).
+ *
+ * @param value - проверяемое значение из spec.
+ * @returns true, если это обычный объект опций.
+ */
 function isOptionObject(value: unknown): value is EncodeOptions {
   return !!value && typeof value === 'object' && !Array.isArray(value);
 }
 
+/**
+ * Проверить имя измерения/значения: непустая строка без внешних пробелов.
+ *
+ * @param value - проверяемое имя.
+ * @param where - что именно именуется, для текста ошибки.
+ * @returns то же имя.
+ * @throws InvalidOptionsError при пустом/пробельном имени.
+ */
 function assertCleanName(value: unknown, where: string): string {
   if (typeof value !== 'string' || value.trim() === '' || value.trim() !== value) {
-    throw new InvalidOptionsError(`fit: ${where} must be a non-empty string without outer spaces`);
+    throw new InvalidOptionsError(`fit: ${where} must be a non-empty trimmed string`);
   }
   return value;
 }
@@ -171,6 +185,10 @@ function assertCleanName(value: unknown, where: string): string {
  * зависимость. С variants та же политика для нового API. Нормированные
  * quality/channel/subsampling здесь запрещены: у них есть собственные
  * измерения spec и собственная семантика поиска.
+ *
+ * @param spec - спецификация fit.
+ * @returns валидные именованные измерения spec (пустой список, если не заданы).
+ * @throws InvalidOptionsError при конфликтах ключей/имён или запрещённых ключах.
  */
 export function validateFitDimensions(spec: FitSpec): readonly FitDimension[] {
   if (spec.dimensions === undefined) return [];
@@ -242,6 +260,13 @@ export function validateFitDimensions(spec: FitSpec): readonly FitDimension[] {
   return spec.dimensions;
 }
 
+/**
+ * Вид дескриптора измерения по имени и числу значений.
+ *
+ * @param name - имя измерения ('colors' — единственное frame-transform).
+ * @param count - число значений измерения; 1 — фиксированное измерение.
+ * @returns 'fixed' | 'categorical' | 'frame-transform'.
+ */
 function descriptorKind(name: string, count: number): PlaneDimensionKind {
   if (count === 1) return 'fixed';
   return name === 'colors' ? 'frame-transform' : 'categorical';
@@ -251,6 +276,12 @@ function descriptorKind(name: string, count: number): PlaneDimensionKind {
  * Скомпилировать измерения одной format-плоскости в дескрипторы.
  * Порядок — исторический и закреплён golden-тестами:
  * палитра → канал → субсемплинг → variants → именованные измерения.
+ *
+ * @param spec - спецификация fit.
+ * @param codec - кодек формата (его channels/subsampling фильтруют значения).
+ * @param monochrome - результат пробы насыщенности: почти монохромному
+ *   кадру grayscale предлагается раньше прочих каналов.
+ * @returns дескрипторы измерений одной format-плоскости в порядке обхода.
  */
 export function compilePlaneDescriptors(
   spec: FitSpec,
@@ -300,6 +331,7 @@ export function compilePlaneDescriptors(
   return descriptors;
 }
 
+/** Накапливаемая рекурсией частичная плоскость: выбранные фрагменты измерений. */
 interface PlaneAccumulator {
   colors?: number;
   channel?: string;
@@ -310,6 +342,15 @@ interface PlaneAccumulator {
   hasDimensions: boolean;
 }
 
+/**
+ * Рекурсивно перебрать декартово произведение дескрипторов одного формата.
+ *
+ * @param format - MIME формата плоскостей.
+ * @param descriptors - дескрипторы измерений в порядке обхода.
+ * @param index - текущий дескриптор рекурсии.
+ * @param acc - уже выбранные значения предыдущих измерений.
+ * @returns генератор полных плоскостей формата.
+ */
 function* iterateDescriptorPlanes(
   format: string,
   descriptors: readonly PlaneDimensionDescriptor[],
@@ -367,6 +408,12 @@ function* iterateDescriptorPlanes(
  *
  * Генератор важен при больших variants/dimensions: fit не материализует
  * декартово произведение целиком до первой пробы.
+ *
+ * @param spec - спецификация fit.
+ * @param getCodec - получение кодека формата из реестра (бросает для
+ *   незарегистрированного формата — честная ошибка до проб).
+ * @param monochrome - проба насыщенности для порядка каналов.
+ * @returns генератор плоскостей в порядке предпочтения поиска.
  */
 export function* iteratePlanes(
   spec: FitSpec,
@@ -385,7 +432,14 @@ export function* iteratePlanes(
   }
 }
 
-/** Все плоскости одним массивом (для тестов и небольших спецификаций). */
+/**
+ * Все плоскости одним массивом (для тестов и небольших спецификаций).
+ *
+ * @param spec - спецификация fit.
+ * @param getCodec - получение кодека формата из реестра.
+ * @param monochrome - проба насыщенности для порядка каналов.
+ * @returns все плоскости в том же порядке, что iteratePlanes.
+ */
 export function buildPlanes(
   spec: FitSpec,
   getCodec: (format: string) => Codec,
@@ -394,7 +448,14 @@ export function buildPlanes(
   return [...iteratePlanes(spec, getCodec, monochrome)];
 }
 
-/** Число плоскостей без материализации их комбинаций. */
+/**
+ * Число плоскостей без материализации их комбинаций.
+ *
+ * @param spec - спецификация fit.
+ * @param getCodec - получение кодека формата из реестра.
+ * @param monochrome - проба насыщенности для порядка каналов.
+ * @returns суммарное число плоскостей по всем форматам spec.
+ */
 export function countPlanes(
   spec: FitSpec,
   getCodec: (format: string) => Codec,
@@ -421,6 +482,10 @@ export interface UnsupportedFitValues {
  * Значения channels/subsampling, которые fit вынужден отфильтровать.
  * Раньше это делалось молча; pipeline превращает результат в warnings,
  * а поиск продолжает каналом/субсемплингом кодека по умолчанию.
+ *
+ * @param spec - спецификация fit.
+ * @param getCodec - получение кодека формата из реестра.
+ * @returns по записи на формат, где есть неподдерживаемые значения.
  */
 export function collectUnsupportedFitValues(
   spec: FitSpec,
@@ -452,8 +517,11 @@ export function collectUnsupportedFitValues(
  * диапазон вызывающего. Все стратегии ищут на ОДНОЙ сетке — поэтому
  * «не хуже owner-loop» проверяется тестом как равенство результата,
  * а не «примерно не хуже».
+ *
+ * @param spec - спецификация fit с диапазоном quality [min, max].
+ * @returns сетка по возрастанию с точными границами spec.
+ * @throws InvalidOptionsError, если диапазон вне [0, 1] или min > max.
  */
-
 export function buildQualityGrid(spec: FitSpec): number[] {
   const [qMin, qMax] = spec.quality;
   if (!(qMin >= 0 && qMax <= 1 && qMin <= qMax)) {

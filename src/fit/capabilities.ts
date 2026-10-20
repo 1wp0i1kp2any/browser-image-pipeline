@@ -15,6 +15,7 @@ import type {
 } from '../types.js';
 import { InvalidOptionsError } from '../errors.js';
 
+/** Роль оси quality кодека для конкретной плоскости fit. */
 export interface ResolvedQualityCapability {
   /** Декларирует ли кодек влияние quality на кодирование. */
   supported: boolean;
@@ -30,6 +31,14 @@ export interface ResolvedQualityCapability {
   step?: number;
 }
 
+/**
+ * Разрешить capabilities кодека (объект или функция от опций) в объект.
+ *
+ * @param codec - кодек плоскости fit.
+ * @param options - опции кодирования плоскости (для функциональной формы).
+ * @returns объявленные capabilities; пустой объект для старых кодеков без них.
+ * @throws InvalidOptionsError, если функция вернула не объект или qualityStep вне (0, 1].
+ */
 function resolveCodecCapabilities(
   codec: Codec,
   options: EncodeOptions = {},
@@ -51,6 +60,15 @@ function resolveCodecCapabilities(
   return resolved;
 }
 
+/**
+ * Вычислить роль quality кодека для конкретной плоскости fit.
+ *
+ * @param codec - кодек плоскости.
+ * @param options - базовые опции плоскости (вариант/измерения), от которых
+ *   могут зависеть capabilities, например lossless.
+ * @returns разрешённая семантика: искать ли по quality, передавать ли её
+ *   в encode, монотонность и шаг внутренней шкалы.
+ */
 export function resolveQualityCapability(
   codec: Codec,
   options: EncodeOptions = {},

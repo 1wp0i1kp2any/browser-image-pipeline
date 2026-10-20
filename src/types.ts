@@ -191,7 +191,22 @@ export type CodecCapabilitiesResolver = (options: EncodeOptions) => CodecCapabil
  * регистрируются ровно тем же механизмом и ничем не привилегированы.
  */
 export interface Codec {
+  /**
+   * Закодировать кадр. Кодек не вправе мутировать переданный кадр:
+   * fit кодирует один и тот же кадр многими пробами.
+   *
+   * @param frame - кадр RGBA для кодирования.
+   * @param options - нормированные опции + поля конкретного кодека;
+   *   неподдерживаемые нормированные значения честно отклоняются ошибкой.
+   * @returns Blob закодированного изображения.
+   */
   encode(frame: Frame, options?: EncodeOptions): Promise<Blob>;
+  /**
+   * Необязательное декодирование формата в кадр (для метрик/потребителя).
+   *
+   * @param blob - закодированное изображение этого формата.
+   * @returns свежий кадр RGBA.
+   */
   decode?(blob: Blob): Promise<Frame>;
   /** Необязательные возможности для fit; см. CodecCapabilities. */
   capabilities?: CodecCapabilities | CodecCapabilitiesResolver;
@@ -267,7 +282,13 @@ export interface PngOptimizeResult {
   engine?: PngOptimizerEngine;
 }
 
-/** Декодер источника в кадр. Шов для тестов и нестандартных сред. */
+/**
+ * Декодер источника в кадр. Шов для тестов и нестандартных сред.
+ *
+ * @param source - исходный Blob/File вызова image().
+ * @returns декодированный кадр RGBA; image() скопирует его, поэтому
+ *   декодер вправе вернуть свой переиспользуемый буфер.
+ */
 export type Decoder = (source: Blob) => Promise<Frame>;
 
 /** Одно значение именованного категориального измерения fit. */
@@ -391,6 +412,12 @@ export interface FitStrategyContext {
  * плоскостью и одной сеткой quality: форматами и порядком плоскостей
  * управляет fit. Возвращённый Blob обязан быть blob'ом выполненной пробы
  * с fits=true на возвращённом quality.
+ *
+ * @param probe - проба точки сетки: энкод с бюджетом/кэшем fit; пробы
+ *   вне сетки запрещены и бросают InvalidOptionsError.
+ * @param grid - сетка качества плоскости по возрастанию.
+ * @param context - плоскость, сигнал, счётчики попыток и бюджет fit.
+ * @returns самая качественная влезшая точка плоскости или null.
  */
 export type FitQualityStrategy = (
   probe: FitProbe,
@@ -430,6 +457,7 @@ export interface FitWarning {
   values?: readonly string[];
 }
 
+/** Опции поиска p.fit: стратегия, бюджеты и монотонность. */
 export interface FitOptions {
   /**
    * Стратегия поиска внутри плоскости: встроенное имя, функция или объект.
@@ -476,8 +504,11 @@ export interface FitParams {
   dimensions?: Readonly<Record<string, FitDimensionValue>>;
 }
 
+/** Результат p.fit при успешном попадании в предикат. */
 export interface FitResult {
+  /** Найденный кандидат: тот самый Blob выполненной пробы (не перекодируется). */
   blob: Blob;
+  /** Параметры, на которых кандидат получен. */
   params: FitParams;
   /** Сколько энкодов реально выполнил поиск (счётчик для отчётов и демо). */
   attempts: number;
@@ -537,6 +568,12 @@ export type PipelineEvent =
   | { type: 'done' }
   | { type: 'error'; error: unknown };
 
+/**
+ * Слушатель событий конвейера (options.state). Синхронный; исключения
+ * слушателя пробрасываются вызывающему — конвейер их не глушит.
+ *
+ * @param event - очередное событие состояния конвейера.
+ */
 export type StateListener = (event: PipelineEvent) => void;
 
 /** Опции вызова `image(...)`. */
@@ -576,11 +613,51 @@ export interface ImageOptions {
 
 /** Ступени конвейера, доступные внутри callback'а `image(...)`. */
 export interface Pipeline {
+  /**
+   * Ступень геометрии: ресайз/кроп текущего кадра (cover по умолчанию).
+   *
+   * @param options - целевые ширина/высота, fit и метод ресемплинга.
+   * @returns завершается, когда текущий кадр заменён результатом.
+   */
   frame(options: FrameOptions): Promise<void>;
-  /** Unsharp mask; типичный сценарий — мягкий шарп после frame-даунскейла. */
+  /**
+   * Unsharp mask; типичный сценарий — мягкий шарп после frame-даунскейла.
+   *
+   * @param options - amount (0..5, по умолчанию 0.5) и radius (1..8, по умолчанию 1).
+   * @returns завершается, когда текущий кадр заменён результатом.
+   */
   sharpen(options?: SharpenOptions): Promise<void>;
+  /**
+   * Ступень палитры: срезать текущий кадр до colors цветов (ленивый чанк).
+   *
+   * @param options - colors 2..256, dithering 0..1, алгоритм и формула.
+   * @returns завершается, когда текущий кадр заменён квантованным.
+   */
   quantize(options: QuantizeOptions): Promise<void>;
+  /**
+   * Закодировать текущий кадр кодеком формата из реестра вызова.
+   *
+   * @param format - MIME формата, например 'image/jpeg'.
+   * @param options - нормированные опции + проброс полей конкретного кодека.
+   * @returns Blob закодированного изображения.
+   * @throws UnknownFormatError, если кодек формата не зарегистрирован.
+   */
   encode(format: string, options?: EncodeOptions): Promise<Blob>;
+  /**
+   * Подобрать параметры кодирования под предикат вызывающего.
+   *
+   * Библиотека не знает ни лимита веса, ни его смысла — только предикат:
+   * перебирает форматы/плоскости spec в порядке визуальной цены и ищет
+   * самую качественную точку сетки, для которой fits(candidate) истинна.
+   *
+   * @param spec - форматы, диапазон качества и остальные измерения поиска.
+   * @param fits - предикат кандидата-Blob'а вызывающего.
+   * @param options - стратегия, бюджет попыток, дедлайн, монотонность.
+   * @returns Blob и параметры найденной точки или null, если пространство
+   *   поиска честно исчерпано без единой влезшей пробы.
+   * @throws FitBudgetExhaustedError при остановке бюджетом раньше исчерпания
+   *   (если не задан onBudgetExhausted: 'return-null').
+   */
   fit(
     spec: FitSpec,
     fits: (candidate: Blob) => boolean,

@@ -8,10 +8,24 @@
 import type { Codec, EncoderRegistry } from './types.js';
 import { UnknownFormatError } from './errors.js';
 
+/**
+ * Нормализовать имя формата реестра: trim + lower-case (MIME регистронезависим).
+ *
+ * @param format - имя формата как дал вызывающий, например ' Image/JPEG '.
+ * @returns канонический ключ реестра.
+ */
 function normalize(format: string): string {
   return format.trim().toLowerCase();
 }
 
+/**
+ * Проверить аргументы регистрации кодека до записи в реестр.
+ *
+ * @param format - имя формата; не должно быть пустым после нормализации.
+ * @param codec - кодек; обязан предоставлять encode(frame, options).
+ * @param where - имя публичной точки входа для текста ошибки.
+ * @throws Error, если формат пуст или у кодека нет encode.
+ */
 function assertRegistration(format: string, codec: Codec, where: string): void {
   if (!format || !normalize(format)) throw new Error(`${where}: format must not be empty`);
   if (!codec || typeof codec.encode !== 'function') {
@@ -25,6 +39,9 @@ function assertRegistration(format: string, codec: Codec, where: string): void {
  * Без аргумента реестр пуст (встроенных кодеков в нём нет). Передайте
  * существующий реестр, чтобы скопировать его текущие регистрации;
  * дальнейшие изменения копии и оригинала независимы.
+ *
+ * @param source - необязательный реестр-источник для копирования регистраций.
+ * @returns новый изолированный реестр.
  */
 export function createEncoderRegistry(source?: EncoderRegistry): EncoderRegistry {
   const codecs = new Map<string, Codec>();
@@ -67,28 +84,52 @@ export const defaultEncoderRegistry: EncoderRegistry = createEncoderRegistry();
 /**
  * Зарегистрировать (или заменить) кодек формата в default-реестре.
  * Новый алгоритм кодирования = новая регистрация; ядро не правится.
+ *
+ * @param format - MIME-имя формата, например 'image/jpeg' (регистр не важен).
+ * @param codec - реализация кодека с обязательным encode.
+ * @throws Error, если формат пуст или у кодека нет encode.
  */
 export function registerEncoder(format: string, codec: Codec): void {
   assertRegistration(format, codec, 'registerEncoder');
   defaultEncoderRegistry.register(format, codec);
 }
 
-/** Снять кодек формата из default-реестра. Возвращает true, если кодек был. */
+/**
+ * Снять кодек формата из default-реестра.
+ *
+ * @param format - MIME-имя формата (регистр не важен).
+ * @returns true, если кодек был зарегистрирован и удалён.
+ */
 export function unregisterEncoder(format: string): boolean {
   return defaultEncoderRegistry.unregister(format);
 }
 
-/** Кодек default-реестра или UnknownFormatError. */
+/**
+ * Получить кодек default-реестра.
+ *
+ * @param format - MIME-имя формата (регистр не важен).
+ * @returns зарегистрированный кодек.
+ * @throws UnknownFormatError, если кодек формата не зарегистрирован.
+ */
 export function getEncoder(format: string): Codec {
   return defaultEncoderRegistry.get(format);
 }
 
-/** Кодек default-реестра или undefined — мягкая проверка наличия. */
+/**
+ * Найти кодек default-реестра без ошибки.
+ *
+ * @param format - MIME-имя формата (регистр не важен).
+ * @returns кодек или undefined, если формат не зарегистрирован.
+ */
 export function findEncoder(format: string): Codec | undefined {
   return defaultEncoderRegistry.find(format);
 }
 
-/** Форматы default-реестра. */
+/**
+ * Список форматов default-реестра.
+ *
+ * @returns нормализованные имена форматов в порядке регистрации.
+ */
 export function registeredFormats(): string[] {
   return defaultEncoderRegistry.formats();
 }

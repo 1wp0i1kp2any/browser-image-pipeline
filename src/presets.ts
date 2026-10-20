@@ -7,6 +7,7 @@
 
 import type { EncodeOptions } from './types.js';
 
+/** Имена стартовых сценариев пресетов энкодеров. */
 export type PresetName = 'photo' | 'screen' | 'maxCompression' | 'lossless' | 'nearLossless';
 
 const jpegTrellis: EncodeOptions = {
@@ -17,6 +18,12 @@ const jpegTrellis: EncodeOptions = {
   trellis_opt_table: true,
 };
 
+/**
+ * Стартовые пресеты EncodeOptions по форматам и сценариям.
+ *
+ * Quality пресеты НЕ содержат: качество и допустимый вес принадлежат
+ * вызывающему. Применение: p.encode(fmt, { ...PRESETS[fmt].photo, quality }).
+ */
 export const PRESETS: Record<string, Partial<Record<PresetName, EncodeOptions>>> = {
   'image/jpeg': {
     // Фото для веба: полный trellis поверх и так хороших умолчаний Squoosh-сборки.

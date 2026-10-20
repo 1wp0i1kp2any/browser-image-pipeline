@@ -3,6 +3,9 @@
 
 /** Среда не поддерживает нужные браузерные API (SSR/Node без decoder-шовa). */
 export class EnvironmentError extends Error {
+  /**
+   * @param message - что именно недоступно в среде и какой шов использовать.
+   */
   constructor(message: string) {
     super(message);
     this.name = 'EnvironmentError';
@@ -12,6 +15,9 @@ export class EnvironmentError extends Error {
 /** Для формата не зарегистрирован энкодер. */
 export class UnknownFormatError extends Error {
   readonly format: string;
+  /**
+   * @param format - формат, для которого энкодер не зарегистрирован.
+   */
   constructor(format: string) {
     super(
       `No encoder registered for format "${format}". ` +
@@ -26,6 +32,11 @@ export class UnknownFormatError extends Error {
 export class UnsupportedChannelError extends Error {
   readonly format: string;
   readonly channel: string;
+  /**
+   * @param format - формат кодека, отклонившего канал.
+   * @param channel - запрошенный неподдерживаемый канал.
+   * @param supported - необязательный список поддерживаемых каналов для подсказки.
+   */
   constructor(format: string, channel: string, supported?: readonly string[]) {
     super(
       `Codec "${format}" does not support channel "${channel}"` +
@@ -43,6 +54,12 @@ export class UnsupportedChannelError extends Error {
 export class UnsupportedOptionError extends Error {
   readonly format: string;
   readonly option: string;
+  /**
+   * @param format - формат кодека, отклонившего опцию.
+   * @param option - имя нормированной опции ('subsampling', 'lossless', ...).
+   * @param value - запрошенное значение (попадает в текст через JSON.stringify).
+   * @param hint - необязательная подсказка, что использовать вместо.
+   */
   constructor(format: string, option: string, value: unknown, hint?: string) {
     super(
       `Codec "${format}" does not support ${option}=${JSON.stringify(value)}` +
@@ -56,6 +73,9 @@ export class UnsupportedOptionError extends Error {
 
 /** Некорректные аргументы ступени (диапазоны, размеры и т.п.). */
 export class InvalidOptionsError extends Error {
+  /**
+   * @param message - какой аргумент некорректен и что ожидалось.
+   */
   constructor(message: string) {
     super(message);
     this.name = 'InvalidOptionsError';
@@ -77,6 +97,10 @@ export class FitBudgetExhaustedError extends Error {
   readonly maxAttempts?: number;
   readonly deadlineMs?: number;
 
+  /**
+   * @param details - причина остановки, счётчик попыток, прошедшее время
+   *   и копии заданных вызывающим лимитов для диагностики.
+   */
   constructor(details: {
     reason: FitBudgetReason;
     attempts: number;
@@ -103,6 +127,12 @@ export class ResourceLimitError extends Error {
   readonly actual: number;
   readonly max: number;
 
+  /**
+   * @param where - ступень/контекст проверки ('image', 'frame', 'fit frame').
+   * @param limit - какой лимит превышен.
+   * @param actual - фактическое значение (пиксели или сторона кадра).
+   * @param max - заданный вызывающим предел.
+   */
   constructor(where: string, limit: 'maxPixels' | 'maxDimension', actual: number, max: number) {
     super(`${where}: ${limit} exceeded: ${actual} > ${max}`);
     this.name = 'ResourceLimitError';
@@ -112,7 +142,11 @@ export class ResourceLimitError extends Error {
   }
 }
 
-/** Бросается при отмене через AbortSignal. name === 'AbortError' — как в DOM. */
+/**
+ * Создать ошибку отмены. name === 'AbortError' — как в DOM.
+ *
+ * @returns DOMException 'AbortError', если доступна, иначе Error с тем же name.
+ */
 export function abortError(): Error {
   // DOMException есть и в браузерах, и в Node ≥ 17.
   if (typeof DOMException === 'function') {
@@ -123,6 +157,12 @@ export function abortError(): Error {
   return err;
 }
 
+/**
+ * Бросить AbortError, если сигнал уже отменён; иначе ничего не делать.
+ *
+ * @param signal - необязательный AbortSignal вызывающего.
+ * @throws AbortError (DOMException с name 'AbortError'), если signal.aborted.
+ */
 export function throwIfAborted(signal: AbortSignal | undefined): void {
   if (signal?.aborted) throw abortError();
 }

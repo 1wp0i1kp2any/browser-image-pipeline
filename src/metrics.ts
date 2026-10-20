@@ -15,6 +15,7 @@ import type { Frame } from './types.js';
 import { InvalidOptionsError, throwIfAborted } from './errors.js';
 import { assertFrame } from './frame.js';
 
+/** Набор базовых RGB-метрик compareFrames. */
 export interface FrameMetrics {
   /** Peak Signal-to-Noise Ratio, дБ. Infinity — кадры идентичны. */
   psnr: number;
@@ -24,11 +25,20 @@ export interface FrameMetrics {
   mae: number;
 }
 
+/** Опции метрик: только отмена длинных циклов по пикселям. */
 export interface MetricOptions {
   /** Проверяется периодически в длинных циклах метрик. */
   signal?: AbortSignal;
 }
 
+/**
+ * Проверить, что два кадра валидны и одинаковых размеров.
+ *
+ * @param a - первый кадр.
+ * @param b - второй кадр.
+ * @param where - имя метрики для текста ошибки.
+ * @throws InvalidOptionsError при невалидном кадре или разных размерах.
+ */
 function checkPair(a: Frame, b: Frame, where: string): void {
   assertFrame(a, where);
   assertFrame(b, where);
@@ -39,7 +49,14 @@ function checkPair(a: Frame, b: Frame, where: string): void {
   }
 }
 
-/** PSNR по RGB (альфа не участвует). */
+/**
+ * PSNR по RGB (альфа не участвует).
+ *
+ * @param a - эталонный кадр.
+ * @param b - сравниваемый кадр тех же размеров.
+ * @param options - signal: необязательная отмена длинного цикла.
+ * @returns PSNR в дБ; Infinity, если кадры побитово равны по RGB.
+ */
 export function computePSNR(a: Frame, b: Frame, options: MetricOptions = {}): number {
   checkPair(a, b, 'computePSNR');
   throwIfAborted(options.signal);
@@ -48,21 +65,35 @@ export function computePSNR(a: Frame, b: Frame, options: MetricOptions = {}): nu
   const db = b.data;
   for (let i = 0; i < da.length; i += 4) {
     if ((i & 262143) === 0) throwIfAborted(options.signal);
-    for (let c = 0; c < 3; c++) {
-      const d = da[i + c] - db[i + c];
-      se += d * d;
-    }
+    const dr = da[i] - db[i];
+    const dg = da[i + 1] - db[i + 1];
+    const db2 = da[i + 2] - db[i + 2];
+    se += dr * dr + dg * dg + db2 * db2;
   }
   const mse = se / (a.width * a.height * 3);
   if (mse === 0) return Infinity;
   return 10 * Math.log10((255 * 255) / mse);
 }
 
+/**
+ * Яркость BT.709 пикселя по смещению в RGBA-буфере.
+ *
+ * @param data - RGBA-буфер кадра.
+ * @param i - байтовое смещение пикселя (кратно 4).
+ * @returns luma 0..255 (float).
+ */
 function lumaAt(data: Uint8ClampedArray, i: number): number {
   return 0.2126 * data[i] + 0.7152 * data[i + 1] + 0.0722 * data[i + 2];
 }
 
-/** Блочная luma-аппроксимация SSIM (блоки 8×8, константы K1=0.01, K2=0.03). */
+/**
+ * Блочная luma-аппроксимация SSIM (блоки 8×8, константы K1=0.01, K2=0.03).
+ *
+ * @param a - эталонный кадр.
+ * @param b - сравниваемый кадр тех же размеров.
+ * @param options - signal: необязательная отмена.
+ * @returns среднее SSIM по блокам, обычно 0..1 (1 — идентичные кадры).
+ */
 export function computeSSIM(a: Frame, b: Frame, options: MetricOptions = {}): number {
   checkPair(a, b, 'computeSSIM');
   throwIfAborted(options.signal);
@@ -72,6 +103,11 @@ export function computeSSIM(a: Frame, b: Frame, options: MetricOptions = {}): nu
   const BLOCK = 8;
   let sum = 0;
   let blocks = 0;
+  // Яркости блока считаются один раз и переиспользуются вторым проходом:
+  // прежняя версия дважды вычисляла luma каждого пикселя. Порядок
+  // суммирования тот же, значения те же — результат побитово совпадает.
+  const lumaA = new Float64Array(BLOCK * BLOCK);
+  const lumaB = new Float64Array(BLOCK * BLOCK);
   for (let by = 0; by < h; by += BLOCK) {
     if ((by & 255) === 0) throwIfAborted(options.signal);
     for (let bx = 0; bx < w; bx += BLOCK) {
@@ -80,11 +116,17 @@ export function computeSSIM(a: Frame, b: Frame, options: MetricOptions = {}): nu
       const n = bw * bh;
       let ma = 0;
       let mb = 0;
+      let k = 0;
       for (let y = 0; y < bh; y++) {
         for (let x = 0; x < bw; x++) {
           const i = ((by + y) * w + (bx + x)) * 4;
-          ma += lumaAt(a.data, i);
-          mb += lumaAt(b.data, i);
+          const la = lumaAt(a.data, i);
+          const lb = lumaAt(b.data, i);
+          lumaA[k] = la;
+          lumaB[k] = lb;
+          k++;
+          ma += la;
+          mb += lb;
         }
       }
       ma /= n;
@@ -92,15 +134,12 @@ export function computeSSIM(a: Frame, b: Frame, options: MetricOptions = {}): nu
       let va = 0;
       let vb = 0;
       let cov = 0;
-      for (let y = 0; y < bh; y++) {
-        for (let x = 0; x < bw; x++) {
-          const i = ((by + y) * w + (bx + x)) * 4;
-          const da = lumaAt(a.data, i) - ma;
-          const db = lumaAt(b.data, i) - mb;
-          va += da * da;
-          vb += db * db;
-          cov += da * db;
-        }
+      for (let j = 0; j < n; j++) {
+        const da = lumaA[j] - ma;
+        const db = lumaB[j] - mb;
+        va += da * da;
+        vb += db * db;
+        cov += da * db;
       }
       // Выборочные дисперсии (n в знаменателе — как в большинстве реализаций SSIM для блоков).
       va /= n;
@@ -116,7 +155,14 @@ export function computeSSIM(a: Frame, b: Frame, options: MetricOptions = {}): nu
   return blocks === 0 ? 1 : sum / blocks;
 }
 
-/** Средняя абсолютная ошибка по RGB. */
+/**
+ * Средняя абсолютная ошибка по RGB.
+ *
+ * @param a - эталонный кадр.
+ * @param b - сравниваемый кадр тех же размеров.
+ * @param options - signal: необязательная отмена.
+ * @returns MAE по трём каналам, 0..255.
+ */
 export function computeMAE(a: Frame, b: Frame, options: MetricOptions = {}): number {
   checkPair(a, b, 'computeMAE');
   throwIfAborted(options.signal);
@@ -130,7 +176,14 @@ export function computeMAE(a: Frame, b: Frame, options: MetricOptions = {}): num
   return sum / (a.width * a.height * 3);
 }
 
-/** Средняя абсолютная ошибка только по альфа-каналу, 0..255. */
+/**
+ * Средняя абсолютная ошибка только по альфа-каналу.
+ *
+ * @param a - эталонный кадр.
+ * @param b - сравниваемый кадр тех же размеров.
+ * @param options - signal: необязательная отмена.
+ * @returns MAE альфы, 0..255.
+ */
 export function computeAlphaMAE(a: Frame, b: Frame, options: MetricOptions = {}): number {
   checkPair(a, b, 'computeAlphaMAE');
   throwIfAborted(options.signal);
@@ -148,6 +201,11 @@ export function computeAlphaMAE(a: Frame, b: Frame, options: MetricOptions = {})
  * Alpha-aware MAE в premultiplied-пространстве: сравниваются
  * (r*a/255, g*a/255, b*a/255, a), среднее по четырём компонентам.
  * Скрытый RGB полностью прозрачных пикселей вклада не даёт.
+ *
+ * @param a - эталонный кадр.
+ * @param b - сравниваемый кадр тех же размеров.
+ * @param options - signal: необязательная отмена.
+ * @returns MAE по premultiplied-компонентам и альфе, 0..255.
  */
 export function computePremultipliedMAE(
   a: Frame,
@@ -172,7 +230,14 @@ export function computePremultipliedMAE(
   return sum / (a.width * a.height * 4);
 }
 
-/** Все базовые RGB-метрики одним вызовом (alpha-метрики — отдельными функциями). */
+/**
+ * Все базовые RGB-метрики одним вызовом (alpha-метрики — отдельными функциями).
+ *
+ * @param a - эталонный кадр.
+ * @param b - сравниваемый кадр тех же размеров.
+ * @param options - signal: необязательная отмена.
+ * @returns объект { psnr, ssim, mae }.
+ */
 export function compareFrames(a: Frame, b: Frame, options: MetricOptions = {}): FrameMetrics {
   return {
     psnr: computePSNR(a, b, options),

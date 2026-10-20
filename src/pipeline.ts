@@ -54,24 +54,45 @@ import {
 } from './fit/strategies.js';
 
 
+/** Ресурсные лимиты вызова image() после извлечения из ImageOptions. */
 interface PipelineLimits {
   maxPixels?: number;
   maxDimension?: number;
 }
 
+/**
+ * Монотонное время в миллисекундах для дедлайнов fit.
+ *
+ * @returns performance.now(), если доступен, иначе Date.now().
+ */
 function nowMs(): number {
   return typeof performance !== 'undefined' ? performance.now() : Date.now();
 }
 
+/**
+ * Проверить форму ресурсных лимитов до декодирования.
+ *
+ * @param limits - maxPixels/maxDimension вызывающего (оба необязательны).
+ * @throws InvalidOptionsError при не положительном целом значении.
+ */
 function validatePipelineLimits(limits: PipelineLimits): void {
   for (const key of ['maxPixels', 'maxDimension'] as const) {
     const value = limits[key];
     if (value !== undefined && (!Number.isInteger(value) || value <= 0)) {
-      throw new InvalidOptionsError(`image: ${key} must be a positive integer, got ${value}`);
+      throw new InvalidOptionsError(`image: ${key} must be positive integer, got ${value}`);
     }
   }
 }
 
+/**
+ * Проверить размеры кадра против заданных ресурсных лимитов.
+ *
+ * @param width - ширина проверяемого кадра/цели.
+ * @param height - высота проверяемого кадра/цели.
+ * @param limits - лимиты вызывающего; незаданные не проверяются.
+ * @param where - контекст проверки для ошибки ('image', 'frame', ...).
+ * @throws ResourceLimitError при превышении любого заданного лимита.
+ */
 function assertDimensionsWithinLimits(
   width: number,
   height: number,
@@ -92,10 +113,28 @@ function assertDimensionsWithinLimits(
   }
 }
 
+/**
+ * Проверить кадр против ресурсных лимитов (обёртка по его размерам).
+ *
+ * @param frame - проверяемый кадр.
+ * @param limits - лимиты вызывающего.
+ * @param where - контекст проверки для ошибки.
+ * @throws ResourceLimitError при превышении.
+ */
 function assertFrameWithinLimits(frame: Frame, limits: PipelineLimits, where: string): void {
   assertDimensionsWithinLimits(frame.width, frame.height, limits, where);
 }
 
+/**
+ * Проверить целевую геометрию frame (включая промежуточный cover-масштаб)
+ * против ресурсных лимитов ДО тяжёлого ресемплинга.
+ *
+ * @param src - текущий кадр конвейера.
+ * @param options - целевая геометрия ступени frame.
+ * @param limits - лимиты вызывающего.
+ * @param where - контекст проверки для ошибки.
+ * @throws ResourceLimitError при превышении целевой или промежуточной геометрии.
+ */
 function assertFrameOptionsWithinLimits(
   src: Frame,
   options: FrameOptions,
@@ -120,13 +159,19 @@ function assertFrameOptionsWithinLimits(
   }
 }
 
+/**
+ * Проверить форму опций fit до проб насыщенности и энкодов.
+ *
+ * @param options - опции поиска (бюджет, дедлайн, монотонность, onWarning).
+ * @throws InvalidOptionsError при любом невалидном значении.
+ */
 function validateFitOptions(options: FitOptions): void {
   if (
     options.maxAttempts !== undefined &&
     (!Number.isInteger(options.maxAttempts) || options.maxAttempts <= 0)
   ) {
     throw new InvalidOptionsError(
-      `fit: maxAttempts must be a positive integer, got ${options.maxAttempts}`,
+      `fit: maxAttempts must be positive integer, got ${options.maxAttempts}`,
     );
   }
   if (
@@ -134,7 +179,7 @@ function validateFitOptions(options: FitOptions): void {
     (!Number.isFinite(options.deadlineMs) || options.deadlineMs <= 0)
   ) {
     throw new InvalidOptionsError(
-      `fit: deadlineMs must be a positive finite number, got ${options.deadlineMs}`,
+      `fit: deadlineMs must be positive finite, got ${options.deadlineMs}`,
     );
   }
   if (
@@ -160,12 +205,24 @@ function validateFitOptions(options: FitOptions): void {
   }
 }
 
+/**
+ * Проверить, что переданный реестр хотя бы умеет get(format).
+ *
+ * @param registry - необязательный реестр из ImageOptions.
+ * @throws InvalidOptionsError, если реестр задан, но get не функция.
+ */
 function assertEncoderRegistry(registry: EncoderRegistry | undefined): void {
   if (registry !== undefined && (!registry || typeof registry.get !== 'function')) {
     throw new InvalidOptionsError('image: registry must provide get(format)');
   }
 }
 
+/**
+ * Реализация ступеней конвейера одного вызова image().
+ *
+ * Состояние — текущий кадр и контекст вызова (сигнал, лимиты, реестр,
+ * слушатель событий); между вызовами ничего не разделяется.
+ */
 class PipelineImpl implements Pipeline {
   #current: Frame;
   #emit: StateListener;
@@ -173,6 +230,13 @@ class PipelineImpl implements Pipeline {
   #limits: PipelineLimits;
   #registry: EncoderRegistry;
 
+  /**
+   * @param initial - стартовый кадр (владение передаётся конвейеру).
+   * @param emit - эмиттер событий состояния (no-op без options.state).
+   * @param signal - необязательная отмена вызова.
+   * @param limits - ресурсные лимиты вызова.
+   * @param registry - реестр кодеков вызова (по умолчанию глобальный).
+   */
   constructor(
     initial: Frame,
     emit: StateListener,
@@ -192,6 +256,11 @@ class PipelineImpl implements Pipeline {
     return this.#current;
   }
 
+  /**
+   * Ступень геометрии (см. Pipeline.frame).
+   *
+   * @param options - целевые размеры, fit и метод ресемплинга.
+   */
   async frame(options: FrameOptions): Promise<void> {
     throwIfAborted(this.#signal);
     assertFrameOptionsWithinLimits(this.#current, options, this.#limits, 'frame');
@@ -207,6 +276,11 @@ class PipelineImpl implements Pipeline {
     });
   }
 
+  /**
+   * Ступень резкости (см. Pipeline.sharpen).
+   *
+   * @param options - amount 0..5 и radius 1..8.
+   */
   async sharpen(options: SharpenOptions = {}): Promise<void> {
     throwIfAborted(this.#signal);
     const amount = options.amount ?? 0.5;
@@ -217,6 +291,11 @@ class PipelineImpl implements Pipeline {
     this.#emit({ type: 'sharpen', amount, radius });
   }
 
+  /**
+   * Ступень палитры (см. Pipeline.quantize); модуль квантования — ленивый чанк.
+   *
+   * @param options - colors, dithering, алгоритм и формула расстояния.
+   */
   async quantize(options: QuantizeOptions): Promise<void> {
     throwIfAborted(this.#signal);
     // Ленивый чанк квантования: image-q грузится только при реальном вызове.
@@ -242,28 +321,36 @@ class PipelineImpl implements Pipeline {
     });
   }
 
+  /**
+   * Ступень кодирования (см. Pipeline.encode).
+   *
+   * @param format - MIME формата в реестре вызова.
+   * @param options - опции кодека.
+   * @returns Blob закодированного изображения.
+   */
   async encode(format: string, options: EncodeOptions = {}): Promise<Blob> {
     throwIfAborted(this.#signal);
-    this.#emit({
-      type: 'encode',
+    const eventBase = {
       format,
       quality: options.quality,
       channel: options.channel,
       subsampling: options.subsampling,
-    });
+    };
+    this.#emit({ type: 'encode', ...eventBase });
     const blob = await this.#registry.get(format).encode(this.#current, options);
     throwIfAborted(this.#signal);
-    this.#emit({
-      type: 'encode-done',
-      format,
-      size: blob.size,
-      quality: options.quality,
-      channel: options.channel,
-      subsampling: options.subsampling,
-    });
+    this.#emit({ type: 'encode-done', ...eventBase, size: blob.size });
     return blob;
   }
 
+  /**
+   * Подбор под предикат (см. Pipeline.fit). Движок поиска — runFit.
+   *
+   * @param spec - спецификация пространства поиска.
+   * @param fits - предикат кандидата вызывающего.
+   * @param options - стратегия, бюджеты и монотонность.
+   * @returns найденная точка или null при честном исчерпании.
+   */
   async fit(
     spec: FitSpec,
     fits: (candidate: Blob) => boolean,
@@ -535,8 +622,7 @@ class PipelineImpl implements Pipeline {
           assertBudgetAvailable();
           attempts += 1;
           const reportedQuality = qualityCapability.passesQuality ? quality : undefined;
-          this.#emit({
-            type: 'encode',
+          const eventBase = {
             format: plane.format,
             quality: reportedQuality,
             colors: plane.colors,
@@ -544,7 +630,8 @@ class PipelineImpl implements Pipeline {
             subsampling: plane.subsampling,
             dimensions: dimensionIds,
             attempt: attempts,
-          });
+          };
+          this.#emit({ type: 'encode', ...eventBase });
           const encodeOptions: EncodeOptions = {
             // Вариант и именованные измерения — база; размерности поиска
             // (quality/channel/subsampling) старше полей legacy-варианта.
@@ -560,14 +647,8 @@ class PipelineImpl implements Pipeline {
           const outcome: ProbeOutcome = { blob, size: blob.size, fits: !!fits(blob) };
           this.#emit({
             type: 'encode-done',
-            format: plane.format,
+            ...eventBase,
             size: blob.size,
-            quality: reportedQuality,
-            colors: plane.colors,
-            channel: plane.channel,
-            subsampling: plane.subsampling,
-            dimensions: dimensionIds,
-            attempt: attempts,
             fits: outcome.fits,
           });
           cache.set(key, outcome);
@@ -622,8 +703,22 @@ class PipelineImpl implements Pipeline {
 
 /**
  * Запустить конвейер над источником.
- * Возвращает то, что вернул pipeline-callback (обычно Blob из p.encode
- * или FitResult | null из p.fit).
+ *
+ * Декодирует источник один раз, затем исполняет callback со ступенями
+ * frame/sharpen/quantize/encode/fit. Двойного перекодирования нет:
+ * каждая ступень работает с кадром в памяти, encode выполняется один
+ * раз на пробу/результат.
+ *
+ * @template T - тип значения, возвращаемого callback'ом.
+ * @param source - исходный Blob/File изображения.
+ * @param pipeline - callback ступеней; его возвращаемое значение
+ *   (обычно Blob из p.encode или FitResult | null из p.fit) станет
+ *   результатом image().
+ * @param options - state/signal/decoder/registry и ресурсные лимиты.
+ * @returns то, что вернул pipeline-callback.
+ * @throws EnvironmentError вне браузера без options.decoder.
+ * @throws ResourceLimitError при превышении заданных лимитов.
+ * @throws AbortError при отмене через options.signal.
  */
 export async function image<T>(
   source: Blob,
@@ -658,8 +753,14 @@ export async function image<T>(
     assertFrameWithinLimits(frame, limits, 'image');
     emit({ type: 'decode-done', width: frame.width, height: frame.height });
 
+    // Копия декодированного кадра защищает объект пользовательского
+    // декодера: вызывающий мог вернуть свой переиспользуемый буфер.
+    // Встроенный браузерный декодер создаёт свежий кадр на вызов и никем
+    // больше не удерживается — для него полная копия кадра (мегабайты на
+    // больших фото) не нужна.
+    const initial = options.decoder ? cloneFrame(frame) : frame;
     const p = new PipelineImpl(
-      cloneFrame(frame),
+      initial,
       emit,
       options.signal,
       limits,

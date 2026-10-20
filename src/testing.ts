@@ -19,6 +19,7 @@ import {
 } from './fit/strategies.js';
 
 export { binary, coarseFine, ownerLoop, secant } from './fit/strategies.js';
+/** Реестр встроенных стратегий качества по именам. */
 export const builtInQualityStrategies = STRATEGIES;
 
 /** Синтетическая кривая веса для одной плоскости качества. */
@@ -49,6 +50,13 @@ export interface QualityStrategyComparison {
   matchesOwnerLoop: boolean;
 }
 
+/**
+ * Проверить синтетическую кривую harness'а до прогона стратегии.
+ *
+ * @param curve - кривая: сетка, sizeAt и ровно один из maxSize/fits.
+ * @throws Error при пустой/невозрастающей сетке, сетке вне [0, 1] или
+ *   неверном наборе порога.
+ */
 function validateCurve(curve: SyntheticQualityCurve): void {
   if (!curve || !Array.isArray(curve.grid) || curve.grid.length === 0) {
     throw new Error('synthetic curve: grid must be a non-empty array');
@@ -68,7 +76,15 @@ function validateCurve(curve: SyntheticQualityCurve): void {
   }
 }
 
-/** Прогнать одну стратегию (имя/функцию/объект) на синтетической кривой. */
+/**
+ * Прогнать одну стратегию (имя/функцию/объект) на синтетической кривой.
+ *
+ * @param strategy - стратегия в любой форме FitStrategy.
+ * @param curve - синтетическая кривая веса одной плоскости.
+ * @returns результат стратегии, все пробы по порядку и число уникальных проб.
+ * @throws Error, если стратегия пробует точки вне сетки или возвращает
+ *   Blob не выполненной пробы (тот же контракт, что у fit).
+ */
 export async function evaluateQualityStrategy(
   strategy: FitStrategy,
   curve: SyntheticQualityCurve,
@@ -122,7 +138,13 @@ export async function evaluateQualityStrategy(
   };
 }
 
-/** Сравнить стратегию с owner-loop: та же точка при монотонной кривой. */
+/**
+ * Сравнить стратегию с owner-loop: та же точка при монотонной кривой.
+ *
+ * @param strategy - проверяемая стратегия.
+ * @param curve - синтетическая кривая веса.
+ * @returns оба прогона и совпала ли точка результата с owner-loop.
+ */
 export async function compareQualityStrategyToOwnerLoop(
   strategy: FitStrategy,
   curve: SyntheticQualityCurve,
@@ -140,6 +162,11 @@ export async function compareQualityStrategyToOwnerLoop(
 /**
  * То же сравнение, но падает ошибкой при расхождении — удобно как
  * готовая проверка в тестах авторов стратегий.
+ *
+ * @param strategy - проверяемая стратегия.
+ * @param curve - синтетическая кривая веса.
+ * @returns сравнение с owner-loop, если точки совпали.
+ * @throws Error с описанием обеих точек при расхождении.
  */
 export async function assertQualityStrategyMatchesOwnerLoop(
   strategy: FitStrategy,

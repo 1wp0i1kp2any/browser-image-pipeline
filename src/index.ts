@@ -126,6 +126,11 @@ export type {
  * По умолчанию используется oxipng/wasm. С `engine:'compression-stream'`
  * динамически грузится отдельный модуль без wasm, который пережимает
  * только IDAT и сохраняет остальные PNG-чанки байт-в-байт.
+ *
+ * @param blob - готовый PNG-Blob.
+ * @param options - движок и параметры оптимизации (см. PngOptimizeOptions).
+ * @returns результат: Blob (оптимизированный или оригинал), размеры, движок.
+ * @throws InvalidOptionsError, если вход не PNG или опции несовместимы с движком.
  */
 export async function optimizePngBlob(
   blob: Blob,
@@ -143,6 +148,14 @@ export async function optimizePngBlob(
 
 type LoadedCodec = Required<Pick<Codec, 'encode' | 'decode'>>;
 
+/**
+ * Собрать ленивую обёртку встроенного кодека для default-реестра.
+ *
+ * @param meta - декларации кодека (capabilities/channels/subsampling),
+ *   доступные ядру до загрузки тяжёлого модуля.
+ * @param load - динамический импорт реального кодекного модуля.
+ * @returns Codec, чей encode/decode при первом вызове грузят реализацию.
+ */
 function lazyCodec(
   meta: Pick<Codec, 'capabilities' | 'channels' | 'subsampling'>,
   load: () => Promise<LoadedCodec>,

@@ -8,9 +8,13 @@
 
 import type { Frame } from './types.js';
 import { EnvironmentError } from './errors.js';
-import { imageDataToFrame } from './frame.js';
+import { frameFromOwnedImageData } from './frame.js';
 
-/** Есть ли в среде браузерный декодер. */
+/**
+ * Есть ли в среде браузерный декодер.
+ *
+ * @returns true, если доступны createImageBitmap и OffscreenCanvas.
+ */
 function hasBrowserDecoder(): boolean {
   return (
     typeof createImageBitmap === 'function' &&
@@ -18,11 +22,19 @@ function hasBrowserDecoder(): boolean {
   );
 }
 
+/**
+ * Декодировать Blob в кадр браузерным путём с учётом EXIF-ориентации.
+ *
+ * @param source - исходный Blob/File изображения любого формата, который
+ *   понимает браузерный декодер среды.
+ * @returns свежий кадр RGBA в ориентации 'from-image'.
+ * @throws EnvironmentError вне браузера (SSR/Node без options.decoder)
+ *   или если OffscreenCanvas не дал 2d-контекст.
+ */
 export async function decodeWithBrowser(source: Blob): Promise<Frame> {
   if (!hasBrowserDecoder()) {
     throw new EnvironmentError(
-      'browser-image-pipeline requires createImageBitmap + OffscreenCanvas. ' +
-        'This environment does not provide them (SSR/Node?). ' +
+      'createImageBitmap + OffscreenCanvas are unavailable (SSR/Node?). ' +
         'Pass options.decoder to decode in your own way.',
     );
   }
@@ -45,7 +57,7 @@ export async function decodeWithBrowser(source: Blob): Promise<Frame> {
     }
     ctx.drawImage(bitmap, 0, 0);
     const imageData = ctx.getImageData(0, 0, bitmap.width, bitmap.height);
-    return imageDataToFrame(imageData);
+    return frameFromOwnedImageData(imageData);
   } finally {
     // Ресурс освобождаем всегда, в том числе при отмене/ошибке выше по стеку.
     bitmap.close();

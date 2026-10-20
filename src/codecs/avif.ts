@@ -20,7 +20,7 @@
 
 import type { ChromaSubsampling, Codec, EncodeOptions, Frame } from '../types.js';
 import { UnsupportedChannelError, UnsupportedOptionError } from '../errors.js';
-import { frameToImageData, imageDataToFrame, toGrayscale } from '../frame.js';
+import { frameFromOwnedImageData, frameToCodecImageData, toGrayscale } from '../frame.js';
 import { AVIF_CHANNELS, AVIF_SUBSAMPLING, avifCapabilities } from './declarations.js';
 import { clamp01, quality100, splitNormalized } from './normalized.js';
 
@@ -33,6 +33,15 @@ const SUBSAMPLE: Record<ChromaSubsampling, number> = {
 
 const TUNE: Record<string, number> = { auto: 0, psnr: 1, ssim: 2 };
 
+/**
+ * Отобразить нормированные EncodeOptions в опции libaom-обёртки @jsquash/avif (см. шапку файла).
+ *
+ * @param options - опции вызывающего: нормированные поля + проброс полей
+ *   конкретного энкодера (проброс старше нормированных отображений).
+ * @returns готовый объект опций энкодера и флаг grayscale.
+ * @throws UnsupportedOptionError для неподдерживаемых нормированных значений.
+ * @throws UnsupportedChannelError для неподдерживаемого канала.
+ */
 export function mapAvifOptions(options: EncodeOptions = {}): {
   mapped: Record<string, unknown>;
   grayscale: boolean;
@@ -74,20 +83,33 @@ export function mapAvifOptions(options: EncodeOptions = {}): {
   return { mapped, grayscale };
 }
 
+/**
+ * Закодировать кадр в AVIF (libaom/wasm, ленивая загрузка; энкод медленный).
+ *
+ * @param frame - кадр RGBA.
+ * @param options - нормированные опции + проброс libaom (см. mapAvifOptions).
+ * @returns Blob image/avif.
+ */
 async function encodeAvif(frame: Frame, options?: EncodeOptions): Promise<Blob> {
   const { mapped, grayscale } = mapAvifOptions(options);
   const { default: encode } = await import('@jsquash/avif/encode');
   const buffer = await encode(
-    frameToImageData(grayscale ? toGrayscale(frame) : frame),
+    frameToCodecImageData(grayscale ? toGrayscale(frame) : frame),
     mapped as Parameters<typeof encode>[1] & { bitDepth?: 8 },
   );
   return new Blob([buffer], { type: 'image/avif' });
 }
 
+/**
+ * Декодировать AVIF-Blob в кадр (libaom/wasm).
+ *
+ * @param blob - AVIF-файл.
+ * @returns свежий кадр RGBA.
+ */
 export async function decodeAvif(blob: Blob): Promise<Frame> {
   const { default: decode } = await import('@jsquash/avif/decode');
   const imageData = await decode(await blob.arrayBuffer());
-  return imageDataToFrame(imageData as ImageData);
+  return frameFromOwnedImageData(imageData as ImageData);
 }
 
 /** Кодек как объект реестра. Никаких привилегий перед пользовательскими. */

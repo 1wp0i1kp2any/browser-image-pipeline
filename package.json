@@ -1,6 +1,6 @@
 {
   "name": "browser-image-pipeline",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "description": "Браузерный конвейер изображений: кадр → квантование палитры → кодирование, плюс подбор параметров под предикат вызывающего кода",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -21,7 +21,13 @@
       "types": "./dist/testing.d.ts",
       "import": "./dist/testing.js",
       "require": "./dist/testing.cjs"
-    }
+    },
+    "./probe": {
+      "types": "./dist/probe.d.ts",
+      "import": "./dist/probe.js",
+      "require": "./dist/probe.cjs"
+    },
+    "./package.json": "./package.json"
   },
   "files": [
     "dist",

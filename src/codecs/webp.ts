@@ -20,10 +20,19 @@
 
 import type { Codec, EncodeOptions, Frame } from '../types.js';
 import { UnsupportedChannelError, UnsupportedOptionError } from '../errors.js';
-import { frameToImageData, imageDataToFrame, toGrayscale } from '../frame.js';
+import { frameFromOwnedImageData, frameToCodecImageData, toGrayscale } from '../frame.js';
 import { WEBP_CHANNELS, WEBP_SUBSAMPLING, webpCapabilities } from './declarations.js';
 import { clamp01, quality100, splitNormalized } from './normalized.js';
 
+/**
+ * Отобразить нормированные EncodeOptions в опции libwebp (см. шапку файла).
+ *
+ * @param options - опции вызывающего: нормированные поля + проброс полей
+ *   конкретного энкодера (проброс старше нормированных отображений).
+ * @returns готовый объект опций энкодера и флаг grayscale (нужно ли обесцветить кадр до encode).
+ * @throws UnsupportedOptionError для неподдерживаемых нормированных значений.
+ * @throws UnsupportedChannelError для неподдерживаемого канала.
+ */
 export function mapWebpOptions(options: EncodeOptions = {}): {
   mapped: Record<string, unknown>;
   grayscale: boolean;
@@ -57,20 +66,33 @@ export function mapWebpOptions(options: EncodeOptions = {}): {
   return { mapped, grayscale };
 }
 
+/**
+ * Закодировать кадр в WebP (libwebp/wasm+SIMD, ленивая загрузка).
+ *
+ * @param frame - кадр RGBA.
+ * @param options - нормированные опции + проброс libwebp (см. mapWebpOptions).
+ * @returns Blob image/webp.
+ */
 async function encodeWebp(frame: Frame, options?: EncodeOptions): Promise<Blob> {
   const { mapped, grayscale } = mapWebpOptions(options);
   const { default: encode } = await import('@jsquash/webp/encode');
   const buffer = await encode(
-    frameToImageData(grayscale ? toGrayscale(frame) : frame),
+    frameToCodecImageData(grayscale ? toGrayscale(frame) : frame),
     mapped as Parameters<typeof encode>[1],
   );
   return new Blob([buffer], { type: 'image/webp' });
 }
 
+/**
+ * Декодировать WebP-Blob в кадр (libwebp/wasm).
+ *
+ * @param blob - WebP-файл.
+ * @returns свежий кадр RGBA.
+ */
 export async function decodeWebp(blob: Blob): Promise<Frame> {
   const { default: decode } = await import('@jsquash/webp/decode');
   const imageData = await decode(await blob.arrayBuffer());
-  return imageDataToFrame(imageData);
+  return frameFromOwnedImageData(imageData);
 }
 
 /** Кодек как объект реестра. Никаких привилегий перед пользовательскими. */

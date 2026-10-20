@@ -32,18 +32,27 @@ import {
   UnsupportedOptionError,
   throwIfAborted,
 } from '../errors.js';
-import { frameToImageData, imageDataToFrame, toGrayscale } from '../frame.js';
+import { frameFromOwnedImageData, frameToCodecImageData, toGrayscale } from '../frame.js';
 import { PRESERVED_COLOR_CHUNKS, listPngChunkTypes } from '../png-chunks.js';
 import { PNG_CAPABILITIES, PNG_CHANNELS } from './declarations.js';
 import { clamp01, splitNormalized } from './normalized.js';
 
 
+/** Нормализованный запрос к oxipng после проверки опций. */
 interface OxipngRequest {
   level: number;
   interlace: boolean;
   optimiseAlpha: boolean;
 }
 
+/**
+ * Собрать запрос пост-прохода oxipng из опций encode, если он попрошен.
+ *
+ * @param options - исходные EncodeOptions (oxipngLevel / oxipng{...}).
+ * @param effort - нормированное усилие 0..1 как запасной источник уровня.
+ * @returns запрос oxipng или null, если оптимизация не попрошена (уровень 0/нет).
+ * @throws InvalidOptionsError, если уровень не целое в [0, 6].
+ */
 function oxipngRequest(options: EncodeOptions, effort?: number): OxipngRequest | null {
   const raw = options.oxipng as Partial<OxipngRequest> | undefined;
   let level: number | undefined;
@@ -63,6 +72,13 @@ function oxipngRequest(options: EncodeOptions, effort?: number): OxipngRequest |
   };
 }
 
+/**
+ * Нормализовать и проверить опции optimizePngBlob для oxipng-движка.
+ *
+ * @param options - опции оптимизации; уровень по умолчанию 2, из effort — 1..6.
+ * @returns валидный запрос oxipng.
+ * @throws InvalidOptionsError при уровне вне [1, 6] или небулевых флагах.
+ */
 function normalizePngOptimizeRequest(options: PngOptimizeOptions): OxipngRequest {
   const level =
     options.level ??
@@ -93,6 +109,12 @@ function normalizePngOptimizeRequest(options: PngOptimizeOptions): OxipngRequest
  * потерял входной цветовой чанк (iCCP/gAMA/cHRM/sRGB/cICP), результат
  * не принимается и возвращается оригинал. По умолчанию результат также
  * принимается только если он меньше входа.
+ *
+ * @param blob - готовый PNG-Blob (структура проверяется строгим парсером).
+ * @param options - уровень/усилие, interlace, optimiseAlpha, onlyIfSmaller, signal.
+ * @returns результат с Blob (оптимизированным или оригиналом) и размерами.
+ * @throws InvalidOptionsError, если вход не Blob/не PNG или опции некорректны.
+ * @throws AbortError при отмене через options.signal (между этапами).
  */
 export async function optimizePngBlob(
   blob: Blob,
@@ -139,6 +161,15 @@ export async function optimizePngBlob(
   };
 }
 
+/**
+ * Закодировать кадр в PNG (@jsquash/png) с опциональным oxipng-постпроходом.
+ *
+ * @param frame - кадр RGBA.
+ * @param options - channel 'grayscale', oxipngLevel/effort/oxipng{...}.
+ * @returns Blob image/png.
+ * @throws UnsupportedOptionError для subsampling и lossless:false.
+ * @throws UnsupportedChannelError для канала, кроме rgba/grayscale.
+ */
 async function encodePng(frame: Frame, options: EncodeOptions = {}): Promise<Blob> {
   const n = splitNormalized(options);
   if (n.subsampling !== undefined) {
@@ -162,7 +193,7 @@ async function encodePng(frame: Frame, options: EncodeOptions = {}): Promise<Blo
     }
   }
   const { default: encode } = await import('@jsquash/png/encode');
-  let buffer = await encode(frameToImageData(effective));
+  let buffer = await encode(frameToCodecImageData(effective));
 
   const request = oxipngRequest(options, n.effort);
   if (request) {
@@ -172,10 +203,16 @@ async function encodePng(frame: Frame, options: EncodeOptions = {}): Promise<Blo
   return new Blob([buffer], { type: 'image/png' });
 }
 
+/**
+ * Декодировать PNG-Blob в кадр (@jsquash/png).
+ *
+ * @param blob - PNG-файл.
+ * @returns свежий кадр RGBA.
+ */
 export async function decodePng(blob: Blob): Promise<Frame> {
   const { default: decode } = await import('@jsquash/png/decode');
   const imageData = await decode(await blob.arrayBuffer());
-  return imageDataToFrame(imageData as ImageData);
+  return frameFromOwnedImageData(imageData as ImageData);
 }
 
 /** Кодек как объект реестра. Никаких привилегий перед пользовательскими. */

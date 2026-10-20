@@ -57,6 +57,11 @@ export const ownerLoop: QualityStrategy = async (probe, grid) => {
  * обязана откатиться к owner-loop по той же плоскости (пробы вилки
  * переиспользуются кэшем fit). Это ловит только инверсию на концах,
  * а не доказывает монотонность внутри.
+ *
+ * @param probe - проба fit: энкод точки сетки с кэшем и бюджетом.
+ * @param grid - сетка качества плоскости по возрастанию.
+ * @returns готовая точка/null, флаг отката к owner-loop или вилка
+ *   [loIdx влез, hiIdx не влез] с результатами крайних проб.
  */
 async function bracket(
   probe: Probe,
@@ -76,7 +81,16 @@ async function bracket(
   return { loIdx: 0, hiIdx, lo, hi };
 }
 
-/** Довести уже найденную вилку [влез, не влез] бинарным поиском до соседних точек. */
+/**
+ * Довести уже найденную вилку [влез, не влез] бинарным поиском до соседних точек.
+ *
+ * @param probe - проба fit.
+ * @param grid - сетка качества плоскости по возрастанию.
+ * @param loIdx - индекс известной влезшей точки.
+ * @param hiIdx - индекс известной невлезшей точки выше loIdx.
+ * @param lo - результат пробы точки loIdx (её Blob и вернётся).
+ * @returns самая высокая влезшая точка вилки.
+ */
 async function refineBinary(
   probe: Probe,
   grid: readonly number[],
@@ -187,6 +201,7 @@ export const coarseFine: QualityStrategy = async (probe, grid, context) => {
 };
 
 
+/** Встроенные стратегии качества по именам. */
 export const STRATEGIES: Record<FitStrategyName, QualityStrategy> = {
   'owner-loop': ownerLoop,
   binary,
@@ -194,18 +209,28 @@ export const STRATEGIES: Record<FitStrategyName, QualityStrategy> = {
   'coarse-fine': coarseFine,
 };
 
+/** Стратегия по умолчанию, если FitOptions.strategy не задана. */
 export const DEFAULT_STRATEGY: FitStrategyName = 'binary';
 
 /** Разрешённая fit-движком стратегия: имя для диагностики + функция поиска. */
 export interface ResolvedFitStrategy {
+  /** Имя стратегии для ошибок и диагностики. */
   name: string;
+  /** Функция поиска точки качества внутри одной плоскости. */
   search: FitQualityStrategy;
+  /** true, если стратегию дал вызывающий функцией/объектом. */
   custom: boolean;
 }
 
 const BUILT_IN_NAMES = new Set<string>(Object.keys(STRATEGIES));
 
-/** Привести FitOptions.strategy (имя/функция/объект) к одной форме. */
+/**
+ * Привести FitOptions.strategy (имя/функция/объект) к одной форме.
+ *
+ * @param strategy - стратегия вызывающего; undefined — умолчание 'binary'.
+ * @returns имя для диагностики, функция поиска и флаг пользовательской стратегии.
+ * @throws InvalidOptionsError при неизвестном имени или невалидной форме.
+ */
 export function resolveFitStrategy(strategy: FitStrategy | undefined): ResolvedFitStrategy {
   if (strategy === undefined) {
     return { name: DEFAULT_STRATEGY, search: STRATEGIES[DEFAULT_STRATEGY], custom: false };
@@ -242,34 +267,34 @@ export function resolveFitStrategy(strategy: FitStrategy | undefined): ResolvedF
  * Контракт возвращаемого стратегией результата: либо null, либо Blob
  * реально выполненной пробы с fits=true ровно на возвращённом quality.
  * Стратегия не вправе изобрести Blob или объявить влезшей непробованную точку.
+ *
+ * @param hit - значение, возвращённое стратегией (проверяется как unknown).
+ * @param probed - все реально выполненные пробы плоскости по quality.
+ * @param strategyName - имя стратегии для текста ошибки.
+ * @throws InvalidOptionsError при любом нарушении контракта результата.
  */
 export function assertStrategyHit(
   hit: unknown,
   probed: ReadonlyMap<number, FitProbeOutcome>,
   strategyName: string,
 ): asserts hit is FitStrategyHit | null {
+  const fail = (detail: string): never => {
+    throw new InvalidOptionsError(`fit strategy "${strategyName}" ${detail}`);
+  };
   if (hit === null) return;
   if (!hit || typeof hit !== 'object') {
-    throw new InvalidOptionsError(`fit strategy "${strategyName}" must return a hit object or null`);
+    fail('must return a hit object or null');
   }
   const candidate = hit as { quality?: unknown; blob?: unknown };
   if (typeof candidate.quality !== 'number' || !Number.isFinite(candidate.quality)) {
-    throw new InvalidOptionsError(`fit strategy "${strategyName}" returned an invalid quality`);
+    fail('returned an invalid quality');
   }
-  const outcome = probed.get(candidate.quality);
+  const outcome = probed.get(candidate.quality as number);
   if (!outcome) {
-    throw new InvalidOptionsError(
-      `fit strategy "${strategyName}" returned quality ${candidate.quality} without probing it`,
-    );
-  }
-  if (candidate.blob !== outcome.blob) {
-    throw new InvalidOptionsError(
-      `fit strategy "${strategyName}" returned a Blob that does not match the probe at quality ${candidate.quality}`,
-    );
-  }
-  if (!outcome.fits) {
-    throw new InvalidOptionsError(
-      `fit strategy "${strategyName}" returned a non-fitting probe at quality ${candidate.quality}`,
-    );
+    fail(`returned quality ${candidate.quality} without probing it`);
+  } else if (candidate.blob !== outcome.blob) {
+    fail(`returned a Blob that does not match the probe at quality ${candidate.quality}`);
+  } else if (!outcome.fits) {
+    fail(`returned a non-fitting probe at quality ${candidate.quality}`);
   }
 }

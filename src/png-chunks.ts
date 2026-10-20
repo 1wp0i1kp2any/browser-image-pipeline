@@ -4,12 +4,17 @@
 // его используют только ленивые PNG-чанки. Парсер проверяет сигнатуру,
 // границы и CRC каждого чанка; сериализация сохраняет payload как есть.
 
+/** 8-байтная сигнатура PNG. */
 export const PNG_SIGNATURE = new Uint8Array([137, 80, 78, 71, 13, 10, 26, 10]);
 
+/** Цветовые чанки, потеря которых оптимизатором считается недопустимой. */
 export const PRESERVED_COLOR_CHUNKS = new Set(['iCCP', 'gAMA', 'cHRM', 'sRGB', 'cICP']);
 
+/** Один PNG-чанк разбора: тип, payload и полный исходный срез. */
 export interface PngChunk {
+  /** Четырёхсимвольный тип чанка ('IHDR', 'IDAT', ...). */
   type: string;
+  /** Payload чанка (view в исходный буфер, без копии). */
   data: Uint8Array;
   /** Полный исходный срез чанка: length + type + data + CRC. */
   raw: Uint8Array;
@@ -25,12 +30,25 @@ const CRC_TABLE = (() => {
   return table;
 })();
 
+/**
+ * CRC32 (полином PNG/zlib) по срезу байт.
+ *
+ * @param bytes - байты type+payload чанка.
+ * @returns беззнаковая контрольная сумма.
+ */
 function crc32(bytes: Uint8Array): number {
   let c = 0xffffffff;
   for (const b of bytes) c = CRC_TABLE[(c ^ b) & 0xff] ^ (c >>> 8);
   return (c ^ 0xffffffff) >>> 0;
 }
 
+/**
+ * Прочитать big-endian uint32.
+ *
+ * @param bytes - буфер.
+ * @param offset - смещение первого байта; вызывающий гарантирует границы.
+ * @returns беззнаковое 32-битное значение.
+ */
 export function readUint32(bytes: Uint8Array, offset: number): number {
   return (
     ((bytes[offset] << 24) |
@@ -41,6 +59,14 @@ export function readUint32(bytes: Uint8Array, offset: number): number {
   );
 }
 
+/**
+ * Строго разобрать PNG на чанки: сигнатура, границы и CRC каждого чанка.
+ *
+ * @param bytes - полный PNG-файл байтами.
+ * @returns чанки в исходном порядке (data/raw — view без копий) или null,
+ *   если вход не является структурно валидным PNG с IHDR первым и IEND
+ *   последним и без хвоста после IEND.
+ */
 export function parsePngChunks(bytes: Uint8Array): PngChunk[] | null {
   if (bytes.length < PNG_SIGNATURE.length) return null;
   for (let i = 0; i < PNG_SIGNATURE.length; i++) {
@@ -79,10 +105,25 @@ export function parsePngChunks(bytes: Uint8Array): PngChunk[] | null {
   return chunks;
 }
 
+/**
+ * Типы чанков PNG в исходном порядке.
+ *
+ * @param bytes - полный PNG-файл байтами.
+ * @returns список типов ('IHDR', 'IDAT', ..., 'IEND') или null, если вход
+ *   не проходит строгий разбор parsePngChunks.
+ */
 export function listPngChunkTypes(bytes: Uint8Array): string[] | null {
   return parsePngChunks(bytes)?.map((chunk) => chunk.type) ?? null;
 }
 
+/**
+ * Сериализовать чанк: длина + тип + payload + CRC.
+ *
+ * @param type - четырёхсимвольный тип чанка.
+ * @param data - payload чанка.
+ * @returns новый буфер полного чанка.
+ * @throws Error, если тип не из 4 символов.
+ */
 export function serializePngChunk(type: string, data: Uint8Array): Uint8Array {
   if (type.length !== 4) throw new Error(`PNG chunk type must have 4 characters: ${type}`);
   const out = new Uint8Array(12 + data.length);
@@ -94,6 +135,12 @@ export function serializePngChunk(type: string, data: Uint8Array): Uint8Array {
   return out;
 }
 
+/**
+ * Склеить срезы байт в один новый буфер.
+ *
+ * @param parts - части в порядке склейки (view копируются).
+ * @returns новый Uint8Array суммарной длины.
+ */
 export function concatBytes(parts: readonly Uint8Array[]): Uint8Array {
   const total = parts.reduce((sum, part) => sum + part.length, 0);
   const out = new Uint8Array(total);

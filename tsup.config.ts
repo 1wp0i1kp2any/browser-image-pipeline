@@ -9,6 +9,7 @@ export default defineConfig({
     index: 'src/index.ts',
     state: 'src/state-collector.ts',
     testing: 'src/testing.ts',
+    probe: 'src/probe.ts',
   },
   format: ['esm', 'cjs'],
   dts: true,

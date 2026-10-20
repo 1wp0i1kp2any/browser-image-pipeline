@@ -12,7 +12,9 @@ import type {
   StateListener,
 } from './types.js';
 
+/** Статус запуска в collector'е. */
 export type PipelineCollectorStatus = 'idle' | 'running' | 'done' | 'error';
+/** Текущая стадия: тип последнего события конвейера или 'idle'. */
 export type PipelineCollectorStage = PipelineEvent['type'] | 'idle';
 
 /** Одна попытка encode в снапшоте collector'а. */
@@ -70,6 +72,7 @@ export interface PipelineStateSnapshot {
   error?: unknown;
 }
 
+/** Подписчик снапшотов collector'а: вызывается после каждого события. */
 export type PipelineStateSubscriber = (snapshot: PipelineStateSnapshot) => void;
 
 /** Collector: listener в image(...), subscribe/getSnapshot — потребителю UI. */
@@ -77,22 +80,48 @@ export interface StateCollector {
   /** Передайте как image(source, pipeline, { state: collector.listener }). */
   listener: StateListener;
   /** Подписаться на снапшоты после каждого события; возвращает отписку. */
+  /**
+   * Подписаться на обновления снапшота.
+   *
+   * @param subscriber - получатель снапшота после каждого события.
+   * @returns функция отписки.
+   */
   subscribe(subscriber: PipelineStateSubscriber): () => void;
   /** Текущий снапшот. Внутренние массивы наружу не отдаются. */
+  /**
+   * Текущий замороженный снапшот запуска.
+   *
+   * @returns иммутабельный снаружи снимок состояния.
+   */
   getSnapshot(): PipelineStateSnapshot;
   /** Сбросить к idle (подписки сохраняются) и уведомить подписчиков. */
+  /**
+   * Сбросить состояние к idle (для повторного использования collector'а).
+   */
   reset(): void;
 }
 
+/** Опции создания collector'а. */
 export interface CreateStateCollectorOptions {
   /** Источник монотонного времени в миллисекундах; шов для тестов. */
   now?: () => number;
 }
 
+/**
+ * Монотонное время по умолчанию для таймингов collector'а.
+ *
+ * @returns performance.now(), если доступен, иначе Date.now().
+ */
 function defaultNow(): number {
   return typeof performance !== 'undefined' ? performance.now() : Date.now();
 }
 
+/**
+ * Копия предупреждения fit с замороженной копией values.
+ *
+ * @param warning - предупреждение из события конвейера.
+ * @returns независимая копия для хранения в collector'е и снапшотах.
+ */
 function cloneWarning(warning: FitWarning): FitWarning {
   return {
     ...warning,
@@ -100,6 +129,14 @@ function cloneWarning(warning: FitWarning): FitWarning {
   };
 }
 
+/**
+ * Создать state-collector поверх options.state.
+ *
+ * @param options - now: необязательный источник монотонного времени
+ *   в миллисекундах (шов для тестов).
+ * @returns collector: listener для image(..., { state }), subscribe,
+ *   getSnapshot и reset для UI-слоя потребителя.
+ */
 export function createStateCollector(
   options: CreateStateCollectorOptions = {},
 ): StateCollector {
@@ -121,6 +158,9 @@ export function createStateCollector(
   let updatedAtMs: number | undefined;
   let stageDurations = new Map<PipelineCollectorStage, number>();
 
+  /**
+   * Сбросить состояние запуска к idle; подписки сохраняются.
+   */
   function clearRun(): void {
     status = 'idle';
     stage = 'idle';
@@ -138,6 +178,12 @@ export function createStateCollector(
     stageDurations = new Map();
   }
 
+  /**
+   * Собрать замороженный снапшот текущего запуска.
+   *
+   * @returns иммутабельный снаружи снимок: статус, стадия, попытки,
+   *   предупреждения, тайминги и диагностика fit.
+   */
   function getSnapshot(): PipelineStateSnapshot {
     const current = now();
     const stages: Partial<Record<PipelineCollectorStage, number>> = {};
@@ -183,6 +229,9 @@ export function createStateCollector(
     });
   }
 
+  /**
+   * Разослать свежий снапшот подписчикам, изолируя их исключения.
+   */
   function notify(): void {
     if (subscribers.size === 0) return;
     const snapshot = getSnapshot();

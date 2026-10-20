@@ -19,7 +19,7 @@
 
 import type { Codec, EncodeOptions, Frame } from '../types.js';
 import { UnsupportedChannelError, UnsupportedOptionError } from '../errors.js';
-import { frameToImageData, imageDataToFrame } from '../frame.js';
+import { frameFromOwnedImageData, frameToCodecImageData } from '../frame.js';
 import { JPEG_CAPABILITIES, JPEG_CHANNELS, JPEG_SUBSAMPLING } from './declarations.js';
 import { clamp01, quality100, splitNormalized } from './normalized.js';
 
@@ -35,6 +35,15 @@ type MozJpegOptions = Record<string, unknown> & {
   color_space?: number;
 };
 
+/**
+ * Отобразить нормированные EncodeOptions в опции MozJPEG (см. шапку файла).
+ *
+ * @param options - опции вызывающего: нормированные поля + проброс полей
+ *   конкретного энкодера (проброс старше нормированных отображений).
+ * @returns готовый объект опций энкодера.
+ * @throws UnsupportedOptionError для неподдерживаемых нормированных значений.
+ * @throws UnsupportedChannelError для неподдерживаемого канала.
+ */
 export function mapJpegOptions(options: EncodeOptions = {}): MozJpegOptions {
   const n = splitNormalized(options);
   if (n.lossless) {
@@ -85,20 +94,33 @@ export function mapJpegOptions(options: EncodeOptions = {}): MozJpegOptions {
   return mapped;
 }
 
+/**
+ * Закодировать кадр в JPEG (MozJPEG/wasm, ленивая загрузка при первом вызове).
+ *
+ * @param frame - кадр RGBA.
+ * @param options - нормированные опции + проброс MozJPEG (см. mapJpegOptions).
+ * @returns Blob image/jpeg.
+ */
 async function encodeJpeg(frame: Frame, options?: EncodeOptions): Promise<Blob> {
   const mapped = mapJpegOptions(options);
   const { default: encode } = await import('@jsquash/jpeg/encode');
   const buffer = await encode(
-    frameToImageData(frame),
+    frameToCodecImageData(frame),
     mapped as Parameters<typeof encode>[1],
   );
   return new Blob([buffer], { type: 'image/jpeg' });
 }
 
+/**
+ * Декодировать JPEG-Blob в кадр (MozJPEG/wasm).
+ *
+ * @param blob - JPEG-файл.
+ * @returns свежий кадр RGBA.
+ */
 export async function decodeJpeg(blob: Blob): Promise<Frame> {
   const { default: decode } = await import('@jsquash/jpeg/decode');
   const imageData = await decode(await blob.arrayBuffer());
-  return imageDataToFrame(imageData);
+  return frameFromOwnedImageData(imageData);
 }
 
 /** Кодек как объект реестра. Никаких привилегий перед пользовательскими. */

@@ -23,6 +23,7 @@ const BUDGETS = {
   root: 13 * 1024,
   state: 3 * 1024,
   testing: 6 * 1024,
+  probe: 2 * 1024,
 };
 const FORBIDDEN_STATIC = [
   /jpeg-.*\.js$/,
@@ -89,6 +90,7 @@ for (const [label, entry, budget] of [
   ['root-all-exports', 'index.js', BUDGETS.root],
   ['state', 'state.js', BUDGETS.state],
   ['testing', 'testing.js', BUDGETS.testing],
+  ['probe', 'probe.js', BUDGETS.probe],
 ]) {
   const result = measure(entry);
   const ok = result.gzip <= budget;

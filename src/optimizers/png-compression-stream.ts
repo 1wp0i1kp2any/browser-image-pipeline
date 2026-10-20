@@ -25,6 +25,14 @@ import type { PngOptimizeOptions, PngOptimizeResult } from '../types.js';
 
 const IDAT_CHUNK_SIZE = 32 * 1024;
 
+/**
+ * Ожидаемая длина распакованного filtered-потока по IHDR (с учётом Adam7).
+ *
+ * @param ihdr - payload IHDR (ровно 13 байт).
+ * @returns суммарное число байт scanline-данных с фильтр-байтами строк.
+ * @throws InvalidOptionsError при невалидном IHDR или неподдерживаемой
+ *   комбинации color type/bit depth.
+ */
 function expectedFilteredByteLength(ihdr: Uint8Array): number {
   if (ihdr.length !== 13) {
     throw new InvalidOptionsError('optimizePngBlob: PNG IHDR must contain exactly 13 bytes');
@@ -77,11 +85,25 @@ function expectedFilteredByteLength(ihdr: Uint8Array): number {
   return total;
 }
 
+/** Минимальная структурная форма CompressionStream/DecompressionStream. */
 interface ByteTransform {
   readable: ReadableStream<Uint8Array>;
   writable: WritableStream<Uint8Array>;
 }
 
+/**
+ * Прогнать байты через стрим-трансформ с потолком выходного размера.
+ *
+ * @param input - входные байты целиком.
+ * @param transform - CompressionStream или DecompressionStream.
+ * @param maxOutputBytes - жёсткий потолок выхода (защита от zip-бомб
+ *   и от рассинхронизации ожидаемой длины).
+ * @param signal - необязательная отмена; проверяется между чанками чтения.
+ * @param operation - имя операции для текста ошибки ('decompress'/'compress').
+ * @returns весь выход одним буфером.
+ * @throws InvalidOptionsError при превышении потолка или ошибке потока.
+ * @throws AbortError при отмене.
+ */
 async function transformBytes(
   input: Uint8Array,
   transform: ByteTransform,
@@ -142,6 +164,14 @@ async function transformBytes(
   return concatBytes(parts);
 }
 
+/**
+ * Побайтовое равенство двух буферов с периодической проверкой отмены.
+ *
+ * @param a - первый буфер.
+ * @param b - второй буфер.
+ * @param signal - необязательная отмена (проверяется каждый 1 МиБ).
+ * @returns true, если длины и все байты равны.
+ */
 function equalBytes(a: Uint8Array, b: Uint8Array, signal: AbortSignal | undefined): boolean {
   if (a.length !== b.length) return false;
   for (let i = 0; i < a.length; i++) {
@@ -151,6 +181,14 @@ function equalBytes(a: Uint8Array, b: Uint8Array, signal: AbortSignal | undefine
   return true;
 }
 
+/**
+ * Проверить совместимость опций с движком compression-stream.
+ *
+ * @param options - опции optimizePngBlob.
+ * @throws InvalidOptionsError при чужом engine, oxipng-опциях
+ *   (level/effort/interlace/optimiseAlpha) или небулевом onlyIfSmaller:
+ *   несовместимое честно отклоняется, а не игнорируется молча.
+ */
 function validateOptions(options: PngOptimizeOptions): void {
   if (options.engine !== undefined && options.engine !== 'compression-stream') {
     throw new InvalidOptionsError('optimizePngBlob: this module implements only compression-stream');
@@ -171,6 +209,14 @@ function validateOptions(options: PngOptimizeOptions): void {
  * Lossless-пережать IDAT готового PNG через CompressionStream без wasm.
  * Пиксельный поток после распаковки не изменяется; все прочие чанки
  * сохраняются байт-в-байт. По умолчанию принимается только меньший файл.
+ *
+ * @param blob - готовый PNG-Blob.
+ * @param options - onlyIfSmaller и signal; oxipng-опции отклоняются.
+ * @returns результат с Blob (пережатым или оригиналом) и размерами.
+ * @throws InvalidOptionsError, если вход не PNG, IDAT не единственная
+ *   непрерывная группа или верификация распаковки не сошлась.
+ * @throws EnvironmentError, если среда без CompressionStream.
+ * @throws AbortError при отмене через options.signal.
  */
 export async function optimizePngBlobWithCompressionStream(
   blob: Blob,
