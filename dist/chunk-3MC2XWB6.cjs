@@ -1,0 +1,2 @@
+'use strict';var chunkC252OH7X_cjs=require('./chunk-C252OH7X.cjs');function l(n={}){let{quality:r,channel:t,subsampling:e,effort:i,lossless:s,...m}=n;return {quality:r,channel:t,subsampling:e,effort:i,lossless:s,rest:m}}function u(n,r){if(!(n>=0&&n<=1))throw new chunkC252OH7X_cjs.e(`${r} must be in [0, 1], got ${n}`);return n}function a(n){return Math.round(u(n,"encode quality")*100)}exports.a=l;exports.b=u;exports.c=a;//# sourceMappingURL=chunk-3MC2XWB6.cjs.map
+//# sourceMappingURL=chunk-3MC2XWB6.cjs.map

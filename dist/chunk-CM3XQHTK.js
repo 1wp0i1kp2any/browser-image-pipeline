@@ -1,0 +1,2 @@
+import {e}from'./chunk-ABWYB2TG.js';function l(n={}){let{quality:r,channel:t,subsampling:e,effort:i,lossless:s,...m}=n;return {quality:r,channel:t,subsampling:e,effort:i,lossless:s,rest:m}}function u(n,r){if(!(n>=0&&n<=1))throw new e(`${r} must be in [0, 1], got ${n}`);return n}function a(n){return Math.round(u(n,"encode quality")*100)}export{l as a,u as b,a as c};//# sourceMappingURL=chunk-CM3XQHTK.js.map
+//# sourceMappingURL=chunk-CM3XQHTK.js.map

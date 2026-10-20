@@ -1,0 +1,1 @@
+import{I as e}from"./index-FREVS0r8.js";function l(t={}){const{quality:n,channel:r,subsampling:o,effort:s,lossless:i,...a}=t;return{quality:n,channel:r,subsampling:o,effort:s,lossless:i,rest:a}}function u(t,n){if(!(t>=0&&t<=1))throw new e(`${n} must be in [0, 1], got ${t}`);return t}function f(t){return Math.round(u(t,"encode quality")*100)}export{u as c,f as q,l as s};
