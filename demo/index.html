@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>browser-image-pipeline — живой стенд</title>
+<style>
+  :root { color-scheme: light dark; }
+  body { font-family: system-ui, sans-serif; margin: 24px; line-height: 1.45; max-width: 1220px; }
+  h1 { font-size: 20px; margin: 0 0 4px; }
+  h2 { font-size: 16px; margin: 24px 0 8px; border-bottom: 1px solid #8884; padding-bottom: 4px; }
+  .muted { opacity: .7; font-size: 13px; }
+  .row { display: flex; gap: 16px; flex-wrap: wrap; align-items: flex-start; }
+  fieldset { border: 1px solid #8885; border-radius: 6px; padding: 10px 12px; min-width: 250px; }
+  legend { font-weight: 600; font-size: 13px; padding: 0 4px; }
+  label { display: block; font-size: 13px; margin: 6px 0 2px; }
+  label.inline { display: inline-flex; gap: 6px; align-items: center; margin-right: 12px; }
+  input[type="number"] { width: 84px; }
+  input[type="range"] { width: 170px; vertical-align: middle; }
+  select { max-width: 210px; }
+  .val { font-variant-numeric: tabular-nums; font-size: 12px; opacity: .8; }
+  button { padding: 6px 14px; cursor: pointer; }
+  button[disabled] { cursor: default; opacity: .5; }
+  #drop { border: 2px dashed #8888; border-radius: 8px; padding: 18px; text-align: center; }
+  #drop.over { border-color: #4a8; background: #4a82; }
+  .preview img { max-width: 100%; max-height: 340px; border: 1px solid #8885; background:
+    repeating-conic-gradient(#8883 0 25%, transparent 0 50%) 0 0/16px 16px; }
+  .preview { flex: 1 1 300px; min-width: 260px; }
+  .preview figcaption { font-size: 13px; margin-top: 4px; font-variant-numeric: tabular-nums; }
+  #status { display: flex; gap: 10px; align-items: center; margin: 14px 0; min-height: 28px; }
+  .spinner { width: 16px; height: 16px; border: 3px solid #8886; border-top-color: #48c;
+    border-radius: 50%; animation: spin .8s linear infinite; visibility: hidden; }
+  body.busy .spinner { visibility: visible; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  table { border-collapse: collapse; font-size: 13px; }
+  th, td { border: 1px solid #8885; padding: 4px 10px; text-align: left; font-variant-numeric: tabular-nums; }
+  #attempts { font-size: 12px; font-family: ui-monospace, monospace; max-height: 240px; overflow: auto;
+    border: 1px solid #8885; padding: 6px 10px; min-height: 24px; }
+  #attempts .ok { color: #2a9d4a; font-weight: 700; }
+  #attempts .bad { opacity: .65; }
+  #error { color: #c33; font-weight: 600; white-space: pre-wrap; }
+  .fmt-block { border-top: 1px dashed #8886; margin-top: 8px; padding-top: 6px; }
+  .fmt-block h4 { margin: 2px 0 4px; font-size: 13px; }
+  code { font-size: 12px; }
+</style>
+</head>
+<body>
+<h1>browser-image-pipeline — живой стенд библиотеки</h1>
+<p class="muted">Та же библиотека, те же вызовы <code>image()</code>, <code>p.frame</code>, <code>p.sharpen</code>,
+<code>p.quantize</code>, <code>p.encode</code>, <code>p.fit</code> — только руками. Форматы: MozJPEG, PNG (+oxipng),
+WebP (libwebp), AVIF (libaom). Страница не входит в пакет.</p>
+
+<div id="status">
+  <div class="spinner"></div>
+  <span id="status-text">Готово. Загрузите картинку.</span>
+  <button id="cancel-btn" disabled>Отмена</button>
+</div>
+<div id="error"></div>
+
+<h2>Исходник</h2>
+<div id="drop">
+  Перетащите сюда картинку или
+  <label class="inline"><input type="file" id="file-input" accept="image/*" /></label>
+  либо <button id="synthetic-btn" type="button">Сгенерировать синтетическую</button>
+  <span class="muted">(градиент + фигуры + текст, 800×600 PNG)</span>
+</div>
+
+<div class="row">
+  <figure class="preview"><img id="before-img" alt="до" /><figcaption id="before-caption">До: —</figcaption></figure>
+  <figure class="preview"><img id="after-img" alt="после" /><figcaption id="after-caption">После: —</figcaption></figure>
+</div>
+
+<p>
+  <label class="inline">Пресет оптимизатора:
+    <select id="preset-select">
+      <option value="avif-photo">Фото для веба — AVIF (tune SSIM, Lanczos3 + шарп)</option>
+      <option value="webp-photo">Фото для веба — WebP (method 4, SharpYUV)</option>
+      <option value="jpeg-compat">Совместимое фото — MozJPEG (полный trellis)</option>
+      <option value="screen-webp">Скриншот / текст — WebP lossless</option>
+      <option value="manga-png">Манга / монохром — PNG: палитра 16 + oxipng</option>
+      <option value="avif-max">Максимальное сжатие фото — AVIF (speed 2)</option>
+      <option value="webp-lossless">Визуально без потерь — WebP lossless (method 6)</option>
+    </select>
+  </label>
+  <button id="preset-apply" type="button">Применить пресет</button>
+  <span class="muted">пресеты выставляют контролы ниже — дальше крутите руками</span>
+</p>
+
+<h2>Ручной режим: frame → sharpen → quantize → encode</h2>
+<div class="row">
+  <fieldset>
+    <legend>Геометрия и резкость</legend>
+    <label>Ширина <input type="number" id="geo-width" value="200" min="1" max="4000" /></label>
+    <label>Высота <input type="number" id="geo-height" value="200" min="1" max="4000" /></label>
+    <label>Режим
+      <select id="geo-fit"><option value="cover">cover</option><option value="contain">contain</option></select>
+    </label>
+    <label>Метод ресайза
+      <select id="geo-method">
+        <option value="lanczos3">Lanczos3 (резкий даунскейл фото)</option>
+        <option value="bilinear">Bilinear (быстрый, мягкий)</option>
+        <option value="area">Area (анти-муар при сильном уменьшении)</option>
+      </select>
+    </label>
+    <label class="inline"><input type="checkbox" id="geo-enabled" checked /> применять frame</label>
+    <div class="fmt-block">
+      <h4>Sharpen (unsharp mask после ресайза)</h4>
+      <label class="inline"><input type="checkbox" id="sharp-enabled" /> включить p.sharpen</label>
+      <label>Сила: <span class="val" id="sharp-amount-val">0.35</span><br />
+        <input type="range" id="sharp-amount" min="0" max="2" step="0.05" value="0.35" /></label>
+      <label>Радиус <input type="number" id="sharp-radius" value="1" min="1" max="8" /></label>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>Квантование палитры (p.quantize)</legend>
+    <label class="inline"><input type="checkbox" id="q-enabled" /> срезать палитру</label>
+    <label>Цветов: <span class="val" id="q-colors-val">64</span><br />
+      <input type="range" id="q-colors" min="2" max="256" step="1" value="64" /></label>
+    <label>Дизеринг: <span class="val" id="q-dithering-val">0.5</span><br />
+      <input type="range" id="q-dithering" min="0" max="1" step="0.05" value="0.5" /></label>
+    <label class="inline"><input type="checkbox" id="q-serpentine" /> serpentine-проход</label>
+    <label>Алгоритм палитры (image-q)
+      <select id="q-algorithm">
+        <option value="wuquant">wuquant (по умолчанию)</option>
+        <option value="rgbquant">rgbquant (графика, малые палитры)</option>
+        <option value="neuquant">neuquant</option>
+        <option value="neuquant-float">neuquant-float</option>
+      </select>
+    </label>
+    <label>Расстояние цветов
+      <select id="q-distance">
+        <option value="pngquant">pngquant (по умолчанию)</option>
+        <option value="euclidean-bt709">euclidean-bt709</option>
+        <option value="color-metric">color-metric</option>
+        <option value="ciede2000">ciede2000 (точнее, медленнее)</option>
+      </select>
+    </label>
+  </fieldset>
+
+  <fieldset>
+    <legend>Энкод (p.encode)</legend>
+    <label>Формат
+      <select id="enc-format">
+        <option value="image/jpeg">image/jpeg (MozJPEG)</option>
+        <option value="image/png">image/png (+ oxipng)</option>
+        <option value="image/webp">image/webp (libwebp)</option>
+        <option value="image/avif">image/avif (libaom, медленно)</option>
+      </select>
+    </label>
+    <label>Качество: <span class="val" id="enc-quality-val">0.90</span><br />
+      <input type="range" id="enc-quality" min="0.05" max="1" step="0.01" value="0.9" /></label>
+    <label>Усилие (effort, время ↔ вес):
+      <span class="val" id="enc-effort-val">0.65</span>
+      <label class="inline"><input type="checkbox" id="enc-effort-enabled" /> задавать</label><br />
+      <input type="range" id="enc-effort" min="0" max="1" step="0.05" value="0.65" /></label>
+    <label class="inline"><input type="checkbox" id="enc-lossless" /> lossless (webp/avif)</label>
+    <label>Канал
+      <select id="enc-channel">
+        <option value="">по умолчанию</option>
+        <option value="ycbcr">YCbCr (jpeg)</option>
+        <option value="rgb">RGB (только jpeg)</option>
+        <option value="grayscale">Grayscale</option>
+        <option value="rgba">RGBA (png/webp/avif)</option>
+      </select>
+    </label>
+    <label>Субсемплинг цветности
+      <select id="enc-subsampling">
+        <option value="">по умолчанию кодека</option>
+        <option value="4:4:4">4:4:4 (цветные края целы)</option>
+        <option value="4:2:2">4:2:2 (avif)</option>
+        <option value="4:2:0">4:2:0</option>
+        <option value="4:0:0">4:0:0 (avif, монохром)</option>
+      </select>
+    </label>
+
+    <div class="fmt-block" id="block-jpeg">
+      <h4>MozJPEG</h4>
+      <label class="inline"><input type="checkbox" id="enc-progressive" checked /> progressive</label>
+      <label class="inline"><input type="checkbox" id="jpg-optimize" checked /> optimize_coding</label><br />
+      <label class="inline"><input type="checkbox" id="jpg-trellis-mp" /> trellis_multipass</label>
+      <label class="inline"><input type="checkbox" id="jpg-trellis-oz" /> trellis_opt_zero</label>
+      <label class="inline"><input type="checkbox" id="jpg-trellis-ot" /> trellis_opt_table</label>
+      <label>Smoothing (шумные исходники): <span class="val" id="jpg-smoothing-val">0</span><br />
+        <input type="range" id="jpg-smoothing" min="0" max="100" step="1" value="0" /></label>
+      <label>Таблица квантования
+        <select id="jpg-quant-table">
+          <option value="">умолчание сборки (3, Robidoux)</option>
+          <option value="0">0 — JPEG Annex K</option>
+          <option value="1">1 — Flat</option>
+          <option value="2">2 — tuned MS-SSIM</option>
+          <option value="3">3 — Robidoux/ImageMagick</option>
+          <option value="4">4 — tuned PSNR-HVS</option>
+          <option value="5">5 — Klein/Silverstein/Carney</option>
+        </select>
+      </label>
+      <label class="inline"><input type="checkbox" id="jpg-chroma-separate" /> отдельное качество цветности</label>
+      <label>chroma_quality: <span class="val" id="jpg-chroma-quality-val">75</span><br />
+        <input type="range" id="jpg-chroma-quality" min="5" max="100" step="1" value="75" /></label>
+    </div>
+
+    <div class="fmt-block" id="block-webp" hidden>
+      <h4>libwebp</h4>
+      <label class="inline"><input type="checkbox" id="webp-sharp-yuv" /> use_sharp_yuv</label>
+      <label class="inline"><input type="checkbox" id="webp-autofilter" /> autofilter</label>
+      <label class="inline"><input type="checkbox" id="webp-exact" /> exact (RGB под альфой)</label>
+      <label>sns_strength: <span class="val" id="webp-sns-val">50</span><br />
+        <input type="range" id="webp-sns" min="0" max="100" step="1" value="50" /></label>
+      <label>filter_strength: <span class="val" id="webp-filter-val">60</span><br />
+        <input type="range" id="webp-filter" min="0" max="100" step="1" value="60" /></label>
+      <label>alpha_quality: <span class="val" id="webp-alpha-val">100</span><br />
+        <input type="range" id="webp-alpha" min="0" max="100" step="1" value="100" /></label>
+      <p class="muted">near_lossless у этой сборки игнорируется (замерено) — «почти без потерь» делайте палитрой 256 + lossless.</p>
+    </div>
+
+    <div class="fmt-block" id="block-avif" hidden>
+      <h4>libaom (AVIF)</h4>
+      <label>Tune
+        <select id="avif-tune">
+          <option value="auto">auto</option>
+          <option value="ssim">ssim</option>
+          <option value="psnr">psnr</option>
+        </select>
+      </label>
+      <label class="inline"><input type="checkbox" id="avif-sharp-yuv" /> enableSharpYUV</label>
+      <label class="inline"><input type="checkbox" id="avif-chroma-dq" /> chromaDeltaQ</label>
+      <label>denoiseLevel: <span class="val" id="avif-denoise-val">0</span><br />
+        <input type="range" id="avif-denoise" min="0" max="50" step="1" value="0" /></label>
+      <label>sharpness: <span class="val" id="avif-sharpness-val">0</span><br />
+        <input type="range" id="avif-sharpness" min="0" max="7" step="1" value="0" /></label>
+      <label>qualityAlpha (−1 = как качество) <input type="number" id="avif-quality-alpha" value="-1" min="-1" max="100" /></label>
+      <p class="muted">effort выше = speed ниже = медленнее и легче. Энкод 200×200 на speed 6 — доли секунды, на speed 0 — секунды.</p>
+    </div>
+
+    <div class="fmt-block" id="block-png" hidden>
+      <h4>PNG / oxipng</h4>
+      <label>Уровень oxipng
+        <select id="png-oxipng-level">
+          <option value="">выключен (голый энкодер)</option>
+          <option value="1">1 (быстрый)</option>
+          <option value="2">2</option>
+          <option value="3" selected>3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6 (макс.)</option>
+        </select>
+      </label>
+      <label class="inline"><input type="checkbox" id="png-oxipng-alpha" /> optimiseAlpha</label>
+      <label class="inline"><input type="checkbox" id="png-oxipng-interlace" /> interlace (Adam7)</label>
+      <p class="muted">Голый rust-png сжимает слабо; oxipng на наших замерах резал вес в 15–190 раз на синтетике без потерь.</p>
+    </div>
+
+    <div style="margin-top:8px"><button id="run-manual" type="button">Сгенерировать</button>
+      <span class="muted">смена опций тоже перегенерирует</span></div>
+  </fieldset>
+</div>
+<p id="manual-result" class="muted">Результат: —</p>
+<p id="metrics-result" class="muted">Метрики: —</p>
+
+<h2>Автоподбор под вес: p.fit(spec, candidate =&gt; candidate.size &lt;= LIMIT)</h2>
+<div class="row">
+  <fieldset>
+    <legend>Параметры подбора</legend>
+    <label>Целевой вес ≤, КиБ <input type="number" id="fit-limit" value="12" min="0.1" step="0.1" /></label>
+    <label>Стратегия
+      <select id="fit-strategy">
+        <option value="binary">binary (умолчание)</option>
+        <option value="owner-loop">owner-loop (базовый цикл заказчика)</option>
+        <option value="secant">secant</option>
+        <option value="coarse-fine">coarse-fine</option>
+      </select>
+    </label>
+    <label>Форматы (порядок предпочтения — как перечислены)</label>
+    <label class="inline"><input type="checkbox" id="fit-fmt-jpeg" checked /> jpeg</label>
+    <label class="inline"><input type="checkbox" id="fit-fmt-webp" /> webp</label>
+    <label class="inline"><input type="checkbox" id="fit-fmt-avif" /> avif</label>
+    <label class="inline"><input type="checkbox" id="fit-fmt-png" /> png</label>
+    <label>Качество от <input type="number" id="fit-qmin" value="0.5" min="0.01" max="1" step="0.01" />
+      до <input type="number" id="fit-qmax" value="0.99" min="0.01" max="1" step="0.01" /></label>
+    <label>Цвета от <input type="number" id="fit-cmin" value="16" min="2" max="256" />
+      до <input type="number" id="fit-cmax" value="256" min="2" max="256" /></label>
+    <label class="inline"><input type="checkbox" id="fit-use-palette" checked /> разрешить палитру в переборе</label><br />
+    <label class="inline"><input type="checkbox" id="fit-allow-gray" /> разрешить grayscale (opt-in)</label><br />
+    <label class="inline"><input type="checkbox" id="fit-use-subsampling" /> перебирать субсемплинг (4:4:4 → дефолт)</label><br />
+    <label class="inline"><input type="checkbox" id="fit-use-variants" /> варианты smoothing 0/30/60 (spec.variants, jpeg)</label>
+    <div style="margin-top:8px">
+      <button id="fit-btn" type="button">Подобрать под вес</button>
+      <button id="compare-btn" type="button">Сравнить все стратегии</button>
+    </div>
+    <p class="muted">Геометрия и метод ресайза подбора берутся из блока выше
+      (<code>spec.frame</code>) — вес должен зависеть от параметров, а не от исходника.
+      AVIF в переборе дорогой: каждая проба — полноценный энкод.</p>
+  </fieldset>
+
+  <fieldset style="flex: 1 1 420px">
+    <legend>Ход поиска (события state в реальном времени)</legend>
+    <div id="attempts">Попыток пока не было.</div>
+    <p id="fit-result" class="muted">Итог: —</p>
+  </fieldset>
+</div>
+
+<h2>Сравнение стратегий на этом же кадре и лимите</h2>
+<table id="compare-table">
+  <thead><tr><th>Стратегия</th><th>Проб (энкодов)</th><th>Параметры</th><th>Вес</th><th>Время</th></tr></thead>
+  <tbody><tr><td colspan="5" class="muted">Нажмите «Сравнить все стратегии».</td></tr></tbody>
+</table>
+
+<script type="module" src="./main.ts"></script>
+</body>
+</html>

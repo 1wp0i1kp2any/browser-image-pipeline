@@ -1,0 +1,2383 @@
+{
+  "generatedAt": "2026-10-20T05:09:21.283Z",
+  "environment": {
+    "node": "v20.20.2",
+    "platform": "linux",
+    "arch": "x64"
+  },
+  "formats": [
+    {
+      "kind": "format",
+      "format": "image/jpeg",
+      "baseline": {
+        "rss": 69091328,
+        "heapUsed": 7007064,
+        "arrayBuffers": 16935,
+        "external": 2555319
+      },
+      "wasmImportInitMs": 13.169737999999995,
+      "wasmPeakRssBytes": 70406144,
+      "afterWasmInit": {
+        "rss": 70946816,
+        "heapUsed": 7487768,
+        "arrayBuffers": 520583,
+        "external": 2887213
+      },
+      "coreImportMs": 19.959709000000004,
+      "firstEncodeMs": 45.892336,
+      "coldTotalMs": 79.021783,
+      "firstSize": 2987,
+      "firstPeakRssBytes": 81489920,
+      "firstPeakHeapUsedBytes": 10300752,
+      "warmEncodeMs": [
+        13.88612999999998,
+        11.631046999999967,
+        11.952649999999949
+      ],
+      "warmSizes": [
+        2987,
+        2987,
+        2987
+      ],
+      "warmPeakRssBytes": 88723456,
+      "finalMemory": {
+        "rss": 91041792,
+        "heapUsed": 10490744,
+        "arrayBuffers": 3753507,
+        "external": 23040001
+      }
+    },
+    {
+      "kind": "format",
+      "format": "image/png",
+      "baseline": {
+        "rss": 74715136,
+        "heapUsed": 7928704,
+        "arrayBuffers": 254880,
+        "external": 2555319
+      },
+      "wasmImportInitMs": 28.52353100000002,
+      "wasmPeakRssBytes": 79024128,
+      "afterWasmInit": {
+        "rss": 79024128,
+        "heapUsed": 8987464,
+        "arrayBuffers": 247074,
+        "external": 5089020
+      },
+      "coreImportMs": 17.237251000000015,
+      "firstEncodeMs": 18.597602999999992,
+      "coldTotalMs": 64.35838500000003,
+      "firstSize": 78646,
+      "firstPeakRssBytes": 88367104,
+      "firstPeakHeapUsedBytes": 11622032,
+      "warmEncodeMs": [
+        3.076112999999964,
+        3.2442990000000123,
+        3.1879519999999957
+      ],
+      "warmSizes": [
+        78646,
+        78646,
+        78646
+      ],
+      "warmPeakRssBytes": 91340800,
+      "finalMemory": {
+        "rss": 91803648,
+        "heapUsed": 11749848,
+        "arrayBuffers": 4160474,
+        "external": 9277648
+      }
+    },
+    {
+      "kind": "format",
+      "format": "image/webp",
+      "baseline": {
+        "rss": 69664768,
+        "heapUsed": 7931304,
+        "arrayBuffers": 254880,
+        "external": 2555319
+      },
+      "wasmImportInitMs": 25.961772999999994,
+      "wasmPeakRssBytes": 72339456,
+      "afterWasmInit": {
+        "rss": 72609792,
+        "heapUsed": 7547224,
+        "arrayBuffers": 712601,
+        "external": 19858495
+      },
+      "coreImportMs": 18.58645200000001,
+      "firstEncodeMs": 40.07691299999999,
+      "coldTotalMs": 84.62513799999999,
+      "firstSize": 818,
+      "firstPeakRssBytes": 81756160,
+      "firstPeakHeapUsedBytes": 11433024,
+      "warmEncodeMs": [
+        17.517342000000042,
+        11.157922999999982,
+        8.441161000000022
+      ],
+      "warmSizes": [
+        818,
+        818,
+        818
+      ],
+      "warmPeakRssBytes": 94097408,
+      "finalMemory": {
+        "rss": 97071104,
+        "heapUsed": 8126008,
+        "arrayBuffers": 3830212,
+        "external": 22928774
+      }
+    },
+    {
+      "kind": "format",
+      "format": "image/avif",
+      "baseline": {
+        "rss": 73322496,
+        "heapUsed": 6941752,
+        "arrayBuffers": 16935,
+        "external": 2555319
+      },
+      "wasmImportInitMs": 39.44111000000001,
+      "wasmPeakRssBytes": 85680128,
+      "afterWasmInit": {
+        "rss": 86491136,
+        "heapUsed": 7732264,
+        "arrayBuffers": 6998200,
+        "external": 26144730
+      },
+      "coreImportMs": 30.640492000000023,
+      "firstEncodeMs": 306.93620899999996,
+      "coldTotalMs": 377.017811,
+      "firstSize": 650,
+      "firstPeakRssBytes": 95072256,
+      "firstPeakHeapUsedBytes": 8536216,
+      "warmEncodeMs": [
+        125.47963200000004,
+        57.96934799999997,
+        63.35375600000009
+      ],
+      "warmSizes": [
+        650,
+        650,
+        650
+      ],
+      "warmPeakRssBytes": 160997376,
+      "finalMemory": {
+        "rss": 141111296,
+        "heapUsed": 8676544,
+        "arrayBuffers": 6969159,
+        "external": 26068393
+      }
+    }
+  ],
+  "paletteCache": {
+    "kind": "palette-cache",
+    "baseline": {
+      "rss": 75837440,
+      "heapUsed": 7005936,
+      "arrayBuffers": 16935,
+      "external": 2555319
+    },
+    "frame": {
+      "width": 384,
+      "height": 384,
+      "bytes": 589824
+    },
+    "maxCachedQuantizedFrames": 2,
+    "maxCachedQuantizedBytes": 1179648,
+    "quantizedLevels": [
+      128,
+      64,
+      32,
+      16,
+      128,
+      64,
+      32,
+      16
+    ],
+    "attempts": 10,
+    "result": null,
+    "milliseconds": 7996.043411,
+    "peakRssBytes": 309489664,
+    "peakHeapUsedBytes": 184540392,
+    "after": {
+      "rss": 278319104,
+      "heapUsed": 136977000,
+      "arrayBuffers": 4745655,
+      "external": 7064804
+    },
+    "finalMemory": {
+      "rss": 278310912,
+      "heapUsed": 136992296,
+      "arrayBuffers": 4745655,
+      "external": 7064804
+    }
+  },
+  "fit": [
+    {
+      "kind": "fit",
+      "case": "jpeg photo",
+      "format": "image/jpeg",
+      "strategy": "owner-loop",
+      "baseline": {
+        "rss": 76664832,
+        "heapUsed": 7014808,
+        "arrayBuffers": 3680423,
+        "external": 5967400
+      },
+      "wasmImportInitMs": 14.022127000000012,
+      "coreImportMs": 28.198026999999968,
+      "cold": {
+        "hit": true,
+        "attempts": 7,
+        "quality": 0.93,
+        "format": "image/jpeg",
+        "size": 4375,
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.93
+        },
+        "milliseconds": 176.00557999999995,
+        "totalWithInitMs": 218.22573399999993,
+        "peakRssBytes": 88866816,
+        "peakHeapUsedBytes": 8518760,
+        "after": {
+          "rss": 89026560,
+          "heapUsed": 8544704,
+          "arrayBuffers": 4082068,
+          "external": 23322640
+        }
+      },
+      "warm": {
+        "hit": true,
+        "attempts": 7,
+        "quality": 0.93,
+        "format": "image/jpeg",
+        "size": 4375,
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.93
+        },
+        "milliseconds": 130.27281400000004,
+        "peakRssBytes": 94449664,
+        "peakHeapUsedBytes": 10285688,
+        "after": {
+          "rss": 94720000,
+          "heapUsed": 10321176,
+          "arrayBuffers": 7469724,
+          "external": 26656548
+        }
+      },
+      "finalMemory": {
+        "rss": 94720000,
+        "heapUsed": 10327192,
+        "arrayBuffers": 7469724,
+        "external": 26656548
+      }
+    },
+    {
+      "kind": "fit",
+      "case": "jpeg photo",
+      "format": "image/jpeg",
+      "strategy": "binary",
+      "baseline": {
+        "rss": 81240064,
+        "heapUsed": 8104432,
+        "arrayBuffers": 3680423,
+        "external": 5967400
+      },
+      "wasmImportInitMs": 13.731225999999992,
+      "coreImportMs": 19.287928999999963,
+      "cold": {
+        "hit": true,
+        "attempts": 8,
+        "quality": 0.93,
+        "format": "image/jpeg",
+        "size": 4375,
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.93
+        },
+        "milliseconds": 171.330643,
+        "totalWithInitMs": 204.34979799999996,
+        "peakRssBytes": 98361344,
+        "peakHeapUsedBytes": 9105304,
+        "after": {
+          "rss": 98631680,
+          "heapUsed": 9128312,
+          "arrayBuffers": 7486392,
+          "external": 26748602
+        }
+      },
+      "warm": {
+        "hit": true,
+        "attempts": 8,
+        "quality": 0.93,
+        "format": "image/jpeg",
+        "size": 4375,
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.93
+        },
+        "milliseconds": 136.9995,
+        "peakRssBytes": 102506496,
+        "peakHeapUsedBytes": 10788976,
+        "after": {
+          "rss": 100327424,
+          "heapUsed": 6860880,
+          "arrayBuffers": 2510072,
+          "external": 21768148
+        }
+      },
+      "finalMemory": {
+        "rss": 100327424,
+        "heapUsed": 6878200,
+        "arrayBuffers": 2510072,
+        "external": 21768148
+      }
+    },
+    {
+      "kind": "fit",
+      "case": "jpeg photo",
+      "format": "image/jpeg",
+      "strategy": "secant",
+      "baseline": {
+        "rss": 75485184,
+        "heapUsed": 7550336,
+        "arrayBuffers": 3680423,
+        "external": 5967400
+      },
+      "wasmImportInitMs": 13.373440999999957,
+      "coreImportMs": 28.420444999999972,
+      "cold": {
+        "hit": true,
+        "attempts": 8,
+        "quality": 0.93,
+        "format": "image/jpeg",
+        "size": 4375,
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.93
+        },
+        "milliseconds": 234.93566700000002,
+        "totalWithInitMs": 276.72955299999995,
+        "peakRssBytes": 92319744,
+        "peakHeapUsedBytes": 8613096,
+        "after": {
+          "rss": 92319744,
+          "heapUsed": 8623896,
+          "arrayBuffers": 4233730,
+          "external": 23491175
+        }
+      },
+      "warm": {
+        "hit": true,
+        "attempts": 8,
+        "quality": 0.93,
+        "format": "image/jpeg",
+        "size": 4375,
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.93
+        },
+        "milliseconds": 153.98534100000006,
+        "peakRssBytes": 100962304,
+        "peakHeapUsedBytes": 10382176,
+        "after": {
+          "rss": 95617024,
+          "heapUsed": 10402536,
+          "arrayBuffers": 7781240,
+          "external": 27001810
+        }
+      },
+      "finalMemory": {
+        "rss": 95617024,
+        "heapUsed": 10411480,
+        "arrayBuffers": 7781240,
+        "external": 27001810
+      }
+    },
+    {
+      "kind": "fit",
+      "case": "jpeg photo",
+      "format": "image/jpeg",
+      "strategy": "coarse-fine",
+      "baseline": {
+        "rss": 76722176,
+        "heapUsed": 8664104,
+        "arrayBuffers": 3680423,
+        "external": 5967400
+      },
+      "wasmImportInitMs": 17.258646,
+      "coreImportMs": 27.136774000000003,
+      "cold": {
+        "hit": true,
+        "attempts": 7,
+        "quality": 0.93,
+        "format": "image/jpeg",
+        "size": 4375,
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.93
+        },
+        "milliseconds": 158.64244100000002,
+        "totalWithInitMs": 203.03786100000002,
+        "peakRssBytes": 87629824,
+        "peakHeapUsedBytes": 7697040,
+        "after": {
+          "rss": 87629824,
+          "heapUsed": 7720152,
+          "arrayBuffers": 3841818,
+          "external": 23101619
+        }
+      },
+      "warm": {
+        "hit": true,
+        "attempts": 7,
+        "quality": 0.93,
+        "format": "image/jpeg",
+        "size": 4375,
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.93
+        },
+        "milliseconds": 104.76467600000001,
+        "peakRssBytes": 93040640,
+        "peakHeapUsedBytes": 9361672,
+        "after": {
+          "rss": 93310976,
+          "heapUsed": 9382808,
+          "arrayBuffers": 7191016,
+          "external": 26416298
+        }
+      },
+      "finalMemory": {
+        "rss": 93310976,
+        "heapUsed": 9388824,
+        "arrayBuffers": 7191016,
+        "external": 26416298
+      }
+    },
+    {
+      "kind": "fit",
+      "case": "jpeg noise",
+      "format": "image/jpeg",
+      "strategy": "owner-loop",
+      "baseline": {
+        "rss": 80789504,
+        "heapUsed": 7935024,
+        "arrayBuffers": 3680423,
+        "external": 5967400
+      },
+      "wasmImportInitMs": 13.590848999999992,
+      "coreImportMs": 19.501784999999984,
+      "cold": {
+        "hit": true,
+        "attempts": 15,
+        "quality": 0.85,
+        "format": "image/jpeg",
+        "size": 23312,
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.85
+        },
+        "milliseconds": 1105.33677,
+        "totalWithInitMs": 1138.429404,
+        "peakRssBytes": 96280576,
+        "peakHeapUsedBytes": 8593480,
+        "after": {
+          "rss": 96550912,
+          "heapUsed": 8619496,
+          "arrayBuffers": 7175970,
+          "external": 25639895
+        }
+      },
+      "warm": {
+        "hit": true,
+        "attempts": 15,
+        "quality": 0.85,
+        "format": "image/jpeg",
+        "size": 23312,
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.85
+        },
+        "milliseconds": 1044.6289939999997,
+        "peakRssBytes": 104120320,
+        "peakHeapUsedBytes": 10457576,
+        "after": {
+          "rss": 104390656,
+          "heapUsed": 10482504,
+          "arrayBuffers": 13665720,
+          "external": 31299250
+        }
+      },
+      "finalMemory": {
+        "rss": 104390656,
+        "heapUsed": 10488520,
+        "arrayBuffers": 13665720,
+        "external": 31299250
+      }
+    },
+    {
+      "kind": "fit",
+      "case": "jpeg noise",
+      "format": "image/jpeg",
+      "strategy": "binary",
+      "baseline": {
+        "rss": 76066816,
+        "heapUsed": 7373424,
+        "arrayBuffers": 3680423,
+        "external": 5967400
+      },
+      "wasmImportInitMs": 19.347283000000004,
+      "coreImportMs": 28.898833000000025,
+      "cold": {
+        "hit": true,
+        "attempts": 8,
+        "quality": 0.85,
+        "format": "image/jpeg",
+        "size": 23312,
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.85
+        },
+        "milliseconds": 450.886787,
+        "totalWithInitMs": 499.13290300000006,
+        "peakRssBytes": 91152384,
+        "peakHeapUsedBytes": 8827048,
+        "after": {
+          "rss": 91152384,
+          "heapUsed": 8539808,
+          "arrayBuffers": 4629238,
+          "external": 23688929
+        }
+      },
+      "warm": {
+        "hit": true,
+        "attempts": 8,
+        "quality": 0.85,
+        "format": "image/jpeg",
+        "size": 23312,
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.85
+        },
+        "milliseconds": 422.05239499999993,
+        "peakRssBytes": 99528704,
+        "peakHeapUsedBytes": 10246856,
+        "after": {
+          "rss": 98996224,
+          "heapUsed": 10267872,
+          "arrayBuffers": 8572256,
+          "external": 27397318
+        }
+      },
+      "finalMemory": {
+        "rss": 98996224,
+        "heapUsed": 10273888,
+        "arrayBuffers": 8572256,
+        "external": 27397318
+      }
+    },
+    {
+      "kind": "fit",
+      "case": "jpeg noise",
+      "format": "image/jpeg",
+      "strategy": "secant",
+      "baseline": {
+        "rss": 80089088,
+        "heapUsed": 7524784,
+        "arrayBuffers": 3680423,
+        "external": 5967400
+      },
+      "wasmImportInitMs": 13.25676900000002,
+      "coreImportMs": 20.419576000000006,
+      "cold": {
+        "hit": true,
+        "attempts": 8,
+        "quality": 0.85,
+        "format": "image/jpeg",
+        "size": 23312,
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.85
+        },
+        "milliseconds": 401.521499,
+        "totalWithInitMs": 435.19784400000003,
+        "peakRssBytes": 95715328,
+        "peakHeapUsedBytes": 8440816,
+        "after": {
+          "rss": 92389376,
+          "heapUsed": 8468672,
+          "arrayBuffers": 4623808,
+          "external": 23686214
+        }
+      },
+      "warm": {
+        "hit": true,
+        "attempts": 8,
+        "quality": 0.85,
+        "format": "image/jpeg",
+        "size": 23312,
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.85
+        },
+        "milliseconds": 342.63713399999995,
+        "peakRssBytes": 98222080,
+        "peakHeapUsedBytes": 10095024,
+        "after": {
+          "rss": 98222080,
+          "heapUsed": 10116072,
+          "arrayBuffers": 8561396,
+          "external": 27391888
+        }
+      },
+      "finalMemory": {
+        "rss": 98222080,
+        "heapUsed": 10125064,
+        "arrayBuffers": 8561396,
+        "external": 27391888
+      }
+    },
+    {
+      "kind": "fit",
+      "case": "jpeg noise",
+      "format": "image/jpeg",
+      "strategy": "coarse-fine",
+      "baseline": {
+        "rss": 77340672,
+        "heapUsed": 7128016,
+        "arrayBuffers": 3680423,
+        "external": 5967400
+      },
+      "wasmImportInitMs": 13.424700000000001,
+      "coreImportMs": 25.432660999999996,
+      "cold": {
+        "hit": true,
+        "attempts": 8,
+        "quality": 0.85,
+        "format": "image/jpeg",
+        "size": 23312,
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.85
+        },
+        "milliseconds": 394.0203,
+        "totalWithInitMs": 432.877661,
+        "peakRssBytes": 94015488,
+        "peakHeapUsedBytes": 7223320,
+        "after": {
+          "rss": 94015488,
+          "heapUsed": 7249344,
+          "arrayBuffers": 4422648,
+          "external": 23488834
+        }
+      },
+      "warm": {
+        "hit": true,
+        "attempts": 8,
+        "quality": 0.85,
+        "format": "image/jpeg",
+        "size": 23312,
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.85
+        },
+        "milliseconds": 350.123553,
+        "peakRssBytes": 101187584,
+        "peakHeapUsedBytes": 8872488,
+        "after": {
+          "rss": 101457920,
+          "heapUsed": 8893504,
+          "arrayBuffers": 8352676,
+          "external": 27190728
+        }
+      },
+      "finalMemory": {
+        "rss": 101457920,
+        "heapUsed": 8902688,
+        "arrayBuffers": 8352676,
+        "external": 27190728
+      }
+    },
+    {
+      "kind": "fit",
+      "case": "jpeg manga",
+      "format": "image/jpeg",
+      "strategy": "owner-loop",
+      "baseline": {
+        "rss": 78835712,
+        "heapUsed": 8645888,
+        "arrayBuffers": 3680423,
+        "external": 5967400
+      },
+      "wasmImportInitMs": 12.826400000000035,
+      "coreImportMs": 19.706830000000025,
+      "cold": {
+        "hit": true,
+        "attempts": 14,
+        "quality": 0.86,
+        "format": "image/jpeg",
+        "size": 17755,
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.86
+        },
+        "milliseconds": 481.52572299999997,
+        "totalWithInitMs": 514.058953,
+        "peakRssBytes": 97120256,
+        "peakHeapUsedBytes": 10423752,
+        "after": {
+          "rss": 91488256,
+          "heapUsed": 10454448,
+          "arrayBuffers": 6018442,
+          "external": 24964331
+        }
+      },
+      "warm": {
+        "hit": true,
+        "attempts": 14,
+        "quality": 0.86,
+        "format": "image/jpeg",
+        "size": 17755,
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.86
+        },
+        "milliseconds": 424.5881519999999,
+        "peakRssBytes": 94461952,
+        "peakHeapUsedBytes": 10475024,
+        "after": {
+          "rss": 94732288,
+          "heapUsed": 8257840,
+          "arrayBuffers": 8098233,
+          "external": 26695691
+        }
+      },
+      "finalMemory": {
+        "rss": 94732288,
+        "heapUsed": 8267768,
+        "arrayBuffers": 8098233,
+        "external": 26695691
+      }
+    },
+    {
+      "kind": "fit",
+      "case": "jpeg manga",
+      "format": "image/jpeg",
+      "strategy": "binary",
+      "baseline": {
+        "rss": 80031744,
+        "heapUsed": 8357568,
+        "arrayBuffers": 3680423,
+        "external": 5967400
+      },
+      "wasmImportInitMs": 15.963943000000029,
+      "coreImportMs": 20.49432200000001,
+      "cold": {
+        "hit": true,
+        "attempts": 7,
+        "quality": 0.86,
+        "format": "image/jpeg",
+        "size": 17755,
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.86
+        },
+        "milliseconds": 239.15802399999995,
+        "totalWithInitMs": 275.616289,
+        "peakRssBytes": 92590080,
+        "peakHeapUsedBytes": 8593464,
+        "after": {
+          "rss": 91766784,
+          "heapUsed": 7037992,
+          "arrayBuffers": 4056940,
+          "external": 23209180
+        }
+      },
+      "warm": {
+        "hit": true,
+        "attempts": 7,
+        "quality": 0.86,
+        "format": "image/jpeg",
+        "size": 17755,
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.86
+        },
+        "milliseconds": 185.081461,
+        "peakRssBytes": 97501184,
+        "peakHeapUsedBytes": 8686496,
+        "after": {
+          "rss": 97771520,
+          "heapUsed": 8707576,
+          "arrayBuffers": 7621260,
+          "external": 26631420
+        }
+      },
+      "finalMemory": {
+        "rss": 97771520,
+        "heapUsed": 8717472,
+        "arrayBuffers": 7621260,
+        "external": 26631420
+      }
+    },
+    {
+      "kind": "fit",
+      "case": "jpeg manga",
+      "format": "image/jpeg",
+      "strategy": "secant",
+      "baseline": {
+        "rss": 84426752,
+        "heapUsed": 7529240,
+        "arrayBuffers": 3680423,
+        "external": 5967400
+      },
+      "wasmImportInitMs": 12.890476999999976,
+      "coreImportMs": 19.968830000000025,
+      "cold": {
+        "hit": true,
+        "attempts": 9,
+        "quality": 0.86,
+        "format": "image/jpeg",
+        "size": 17755,
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.86
+        },
+        "milliseconds": 266.216191,
+        "totalWithInitMs": 299.075498,
+        "peakRssBytes": 98684928,
+        "peakHeapUsedBytes": 8060472,
+        "after": {
+          "rss": 98684928,
+          "heapUsed": 7345424,
+          "arrayBuffers": 4493904,
+          "external": 23621262
+        }
+      },
+      "warm": {
+        "hit": true,
+        "attempts": 9,
+        "quality": 0.86,
+        "format": "image/jpeg",
+        "size": 17755,
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.86
+        },
+        "milliseconds": 227.179218,
+        "peakRssBytes": 106311680,
+        "peakHeapUsedBytes": 8978312,
+        "after": {
+          "rss": 103477248,
+          "heapUsed": 9000352,
+          "arrayBuffers": 8495188,
+          "external": 27455584
+        }
+      },
+      "finalMemory": {
+        "rss": 103477248,
+        "heapUsed": 9006368,
+        "arrayBuffers": 8495188,
+        "external": 27455584
+      }
+    },
+    {
+      "kind": "fit",
+      "case": "jpeg manga",
+      "format": "image/jpeg",
+      "strategy": "coarse-fine",
+      "baseline": {
+        "rss": 83820544,
+        "heapUsed": 8268272,
+        "arrayBuffers": 3680423,
+        "external": 5967400
+      },
+      "wasmImportInitMs": 13.580569999999994,
+      "coreImportMs": 26.098531000000037,
+      "cold": {
+        "hit": true,
+        "attempts": 6,
+        "quality": 0.86,
+        "format": "image/jpeg",
+        "size": 17755,
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.86
+        },
+        "milliseconds": 207.81012399999997,
+        "totalWithInitMs": 247.489225,
+        "peakRssBytes": 89468928,
+        "peakHeapUsedBytes": 10624944,
+        "after": {
+          "rss": 89354240,
+          "heapUsed": 7123328,
+          "arrayBuffers": 3835578,
+          "external": 23001699
+        }
+      },
+      "warm": {
+        "hit": true,
+        "attempts": 6,
+        "quality": 0.86,
+        "format": "image/jpeg",
+        "size": 17755,
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.86
+        },
+        "milliseconds": 167.01430499999998,
+        "peakRssBytes": 92590080,
+        "peakHeapUsedBytes": 8586144,
+        "after": {
+          "rss": 95023104,
+          "heapUsed": 8896952,
+          "arrayBuffers": 7178536,
+          "external": 26216458
+        }
+      },
+      "finalMemory": {
+        "rss": 95023104,
+        "heapUsed": 8902976,
+        "arrayBuffers": 7178536,
+        "external": 26216458
+      }
+    },
+    {
+      "kind": "fit",
+      "case": "jpeg UI",
+      "format": "image/jpeg",
+      "strategy": "owner-loop",
+      "baseline": {
+        "rss": 78258176,
+        "heapUsed": 8653744,
+        "arrayBuffers": 3680423,
+        "external": 5967400
+      },
+      "wasmImportInitMs": 12.572996999999987,
+      "coreImportMs": 19.686612999999966,
+      "cold": {
+        "hit": true,
+        "attempts": 5,
+        "quality": 0.95,
+        "format": "image/jpeg",
+        "size": 10714,
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.95
+        },
+        "milliseconds": 178.314689,
+        "totalWithInitMs": 210.57429899999994,
+        "peakRssBytes": 88035328,
+        "peakHeapUsedBytes": 10332112,
+        "after": {
+          "rss": 86675456,
+          "heapUsed": 7131536,
+          "arrayBuffers": 3310912,
+          "external": 22539672
+        }
+      },
+      "warm": {
+        "hit": true,
+        "attempts": 5,
+        "quality": 0.95,
+        "format": "image/jpeg",
+        "size": 10714,
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.95
+        },
+        "milliseconds": 104.190427,
+        "peakRssBytes": 88555520,
+        "peakHeapUsedBytes": 8610248,
+        "after": {
+          "rss": 89096192,
+          "heapUsed": 8634856,
+          "arrayBuffers": 6295844,
+          "external": 25459044
+        }
+      },
+      "finalMemory": {
+        "rss": 89096192,
+        "heapUsed": 8640872,
+        "arrayBuffers": 6295844,
+        "external": 25459044
+      }
+    },
+    {
+      "kind": "fit",
+      "case": "jpeg UI",
+      "format": "image/jpeg",
+      "strategy": "binary",
+      "baseline": {
+        "rss": 80318464,
+        "heapUsed": 8047608,
+        "arrayBuffers": 3680423,
+        "external": 5967400
+      },
+      "wasmImportInitMs": 12.144747999999993,
+      "coreImportMs": 25.334919000000014,
+      "cold": {
+        "hit": true,
+        "attempts": 8,
+        "quality": 0.95,
+        "format": "image/jpeg",
+        "size": 10714,
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.95
+        },
+        "milliseconds": 173.55915499999998,
+        "totalWithInitMs": 211.03882199999998,
+        "peakRssBytes": 94101504,
+        "peakHeapUsedBytes": 8653656,
+        "after": {
+          "rss": 89358336,
+          "heapUsed": 8676664,
+          "arrayBuffers": 4171324,
+          "external": 23389198
+        }
+      },
+      "warm": {
+        "hit": true,
+        "attempts": 8,
+        "quality": 0.95,
+        "format": "image/jpeg",
+        "size": 10714,
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.95
+        },
+        "milliseconds": 130.78400099999993,
+        "peakRssBytes": 96043008,
+        "peakHeapUsedBytes": 10485552,
+        "after": {
+          "rss": 96583680,
+          "heapUsed": 10506568,
+          "arrayBuffers": 7758828,
+          "external": 26900256
+        }
+      },
+      "finalMemory": {
+        "rss": 96583680,
+        "heapUsed": 10512584,
+        "arrayBuffers": 7758828,
+        "external": 26900256
+      }
+    },
+    {
+      "kind": "fit",
+      "case": "jpeg UI",
+      "format": "image/jpeg",
+      "strategy": "secant",
+      "baseline": {
+        "rss": 77451264,
+        "heapUsed": 8162520,
+        "arrayBuffers": 3680423,
+        "external": 5967400
+      },
+      "wasmImportInitMs": 15.895602999999966,
+      "coreImportMs": 26.967911000000015,
+      "cold": {
+        "hit": true,
+        "attempts": 9,
+        "quality": 0.95,
+        "format": "image/jpeg",
+        "size": 10714,
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.95
+        },
+        "milliseconds": 185.675052,
+        "totalWithInitMs": 228.53856599999997,
+        "peakRssBytes": 90374144,
+        "peakHeapUsedBytes": 8588208,
+        "after": {
+          "rss": 89182208,
+          "heapUsed": 8619872,
+          "arrayBuffers": 4371638,
+          "external": 23586155
+        }
+      },
+      "warm": {
+        "hit": true,
+        "attempts": 9,
+        "quality": 0.95,
+        "format": "image/jpeg",
+        "size": 10714,
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.95
+        },
+        "milliseconds": 141.06974099999996,
+        "peakRssBytes": 97619968,
+        "peakHeapUsedBytes": 10254744,
+        "after": {
+          "rss": 92487680,
+          "heapUsed": 10276784,
+          "arrayBuffers": 8159456,
+          "external": 27294170
+        }
+      },
+      "finalMemory": {
+        "rss": 92487680,
+        "heapUsed": 10282800,
+        "arrayBuffers": 8159456,
+        "external": 27294170
+      }
+    },
+    {
+      "kind": "fit",
+      "case": "jpeg UI",
+      "format": "image/jpeg",
+      "strategy": "coarse-fine",
+      "baseline": {
+        "rss": 83558400,
+        "heapUsed": 8500584,
+        "arrayBuffers": 3680423,
+        "external": 5967400
+      },
+      "wasmImportInitMs": 14.696193999999991,
+      "coreImportMs": 26.428541000000024,
+      "cold": {
+        "hit": true,
+        "attempts": 7,
+        "quality": 0.95,
+        "format": "image/jpeg",
+        "size": 10714,
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.95
+        },
+        "milliseconds": 216.40346899999997,
+        "totalWithInitMs": 257.52820399999996,
+        "peakRssBytes": 92893184,
+        "peakHeapUsedBytes": 8676696,
+        "after": {
+          "rss": 93159424,
+          "heapUsed": 8704968,
+          "arrayBuffers": 3967666,
+          "external": 23190569
+        }
+      },
+      "warm": {
+        "hit": true,
+        "attempts": 7,
+        "quality": 0.95,
+        "format": "image/jpeg",
+        "size": 10714,
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.95
+        },
+        "milliseconds": 122.90603599999997,
+        "peakRssBytes": 99647488,
+        "peakHeapUsedBytes": 9974344,
+        "after": {
+          "rss": 98287616,
+          "heapUsed": 9999480,
+          "arrayBuffers": 7351512,
+          "external": 26502998
+        }
+      },
+      "finalMemory": {
+        "rss": 98287616,
+        "heapUsed": 10008208,
+        "arrayBuffers": 7351512,
+        "external": 26502998
+      }
+    },
+    {
+      "kind": "fit",
+      "case": "jpeg moire",
+      "format": "image/jpeg",
+      "strategy": "owner-loop",
+      "baseline": {
+        "rss": 76365824,
+        "heapUsed": 6826800,
+        "arrayBuffers": 3680423,
+        "external": 5967400
+      },
+      "wasmImportInitMs": 13.930619999999976,
+      "coreImportMs": 24.83566300000001,
+      "cold": {
+        "hit": true,
+        "attempts": 11,
+        "quality": 0.89,
+        "format": "image/jpeg",
+        "size": 21726,
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.89
+        },
+        "milliseconds": 520.98051,
+        "totalWithInitMs": 559.746793,
+        "peakRssBytes": 92442624,
+        "peakHeapUsedBytes": 9211232,
+        "after": {
+          "rss": 100012032,
+          "heapUsed": 9237128,
+          "arrayBuffers": 5545202,
+          "external": 24366537
+        }
+      },
+      "warm": {
+        "hit": true,
+        "attempts": 11,
+        "quality": 0.89,
+        "format": "image/jpeg",
+        "size": 21726,
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.89
+        },
+        "milliseconds": 477.759241,
+        "peakRssBytes": 100012032,
+        "peakHeapUsedBytes": 10657368,
+        "after": {
+          "rss": 95485952,
+          "heapUsed": 10678400,
+          "arrayBuffers": 10506584,
+          "external": 28854934
+        }
+      },
+      "finalMemory": {
+        "rss": 95485952,
+        "heapUsed": 10687160,
+        "arrayBuffers": 10506584,
+        "external": 28854934
+      }
+    },
+    {
+      "kind": "fit",
+      "case": "jpeg moire",
+      "format": "image/jpeg",
+      "strategy": "binary",
+      "baseline": {
+        "rss": 77799424,
+        "heapUsed": 7217432,
+        "arrayBuffers": 3680423,
+        "external": 5967400
+      },
+      "wasmImportInitMs": 15.726057999999995,
+      "coreImportMs": 27.186072000000024,
+      "cold": {
+        "hit": true,
+        "attempts": 7,
+        "quality": 0.89,
+        "format": "image/jpeg",
+        "size": 21726,
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.89
+        },
+        "milliseconds": 271.35341299999993,
+        "totalWithInitMs": 314.265543,
+        "peakRssBytes": 94732288,
+        "peakHeapUsedBytes": 7409688,
+        "after": {
+          "rss": 93462528,
+          "heapUsed": 7434784,
+          "arrayBuffers": 3959606,
+          "external": 23057619
+        }
+      },
+      "warm": {
+        "hit": true,
+        "attempts": 7,
+        "quality": 0.89,
+        "format": "image/jpeg",
+        "size": 21726,
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.89
+        },
+        "milliseconds": 218.79672700000003,
+        "peakRssBytes": 103464960,
+        "peakHeapUsedBytes": 9016976,
+        "after": {
+          "rss": 97423360,
+          "heapUsed": 9038056,
+          "arrayBuffers": 7593232,
+          "external": 26494938
+        }
+      },
+      "finalMemory": {
+        "rss": 97423360,
+        "heapUsed": 9044072,
+        "arrayBuffers": 7593232,
+        "external": 26494938
+      }
+    },
+    {
+      "kind": "fit",
+      "case": "jpeg moire",
+      "format": "image/jpeg",
+      "strategy": "secant",
+      "baseline": {
+        "rss": 81190912,
+        "heapUsed": 7291608,
+        "arrayBuffers": 3680423,
+        "external": 5967400
+      },
+      "wasmImportInitMs": 13.56471700000003,
+      "coreImportMs": 28.947997000000043,
+      "cold": {
+        "hit": true,
+        "attempts": 8,
+        "quality": 0.89,
+        "format": "image/jpeg",
+        "size": 21726,
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.89
+        },
+        "milliseconds": 295.820223,
+        "totalWithInitMs": 338.3329370000001,
+        "peakRssBytes": 91451392,
+        "peakHeapUsedBytes": 9470064,
+        "after": {
+          "rss": 87302144,
+          "heapUsed": 9493072,
+          "arrayBuffers": 4440334,
+          "external": 23523703
+        }
+      },
+      "warm": {
+        "hit": true,
+        "attempts": 8,
+        "quality": 0.89,
+        "format": "image/jpeg",
+        "size": 21726,
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.89
+        },
+        "milliseconds": 258.442993,
+        "peakRssBytes": 94437376,
+        "peakHeapUsedBytes": 11035096,
+        "after": {
+          "rss": 94437376,
+          "heapUsed": 7079576,
+          "arrayBuffers": 3807307,
+          "external": 22679725
+        }
+      },
+      "finalMemory": {
+        "rss": 94437376,
+        "heapUsed": 7085592,
+        "arrayBuffers": 3807307,
+        "external": 22679725
+      }
+    },
+    {
+      "kind": "fit",
+      "case": "jpeg moire",
+      "format": "image/jpeg",
+      "strategy": "coarse-fine",
+      "baseline": {
+        "rss": 84660224,
+        "heapUsed": 8685208,
+        "arrayBuffers": 3680423,
+        "external": 5967400
+      },
+      "wasmImportInitMs": 13.79143700000003,
+      "coreImportMs": 28.231402000000003,
+      "cold": {
+        "hit": true,
+        "attempts": 6,
+        "quality": 0.89,
+        "format": "image/jpeg",
+        "size": 21726,
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.89
+        },
+        "milliseconds": 266.318481,
+        "totalWithInitMs": 308.34132000000005,
+        "peakRssBytes": 93216768,
+        "peakHeapUsedBytes": 7137984,
+        "after": {
+          "rss": 92155904,
+          "heapUsed": 7165704,
+          "arrayBuffers": 3744460,
+          "external": 22853246
+        }
+      },
+      "warm": {
+        "hit": true,
+        "attempts": 6,
+        "quality": 0.89,
+        "format": "image/jpeg",
+        "size": 21726,
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.89
+        },
+        "milliseconds": 230.37653799999998,
+        "peakRssBytes": 95391744,
+        "peakHeapUsedBytes": 8705784,
+        "after": {
+          "rss": 98054144,
+          "heapUsed": 8727320,
+          "arrayBuffers": 7162940,
+          "external": 26086192
+        }
+      },
+      "finalMemory": {
+        "rss": 98054144,
+        "heapUsed": 8735672,
+        "arrayBuffers": 7162940,
+        "external": 26086192
+      }
+    },
+    {
+      "kind": "fit",
+      "case": "jpeg panorama",
+      "format": "image/jpeg",
+      "strategy": "owner-loop",
+      "baseline": {
+        "rss": 80543744,
+        "heapUsed": 7487672,
+        "arrayBuffers": 3680423,
+        "external": 5967400
+      },
+      "wasmImportInitMs": 15.080745999999976,
+      "coreImportMs": 29.25465700000001,
+      "cold": {
+        "hit": true,
+        "attempts": 5,
+        "quality": 0.95,
+        "format": "image/jpeg",
+        "size": 4215,
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.95
+        },
+        "milliseconds": 197.928927,
+        "totalWithInitMs": 242.26432999999997,
+        "peakRssBytes": 98873344,
+        "peakHeapUsedBytes": 8147240,
+        "after": {
+          "rss": 97091584,
+          "heapUsed": 8158704,
+          "arrayBuffers": 6955986,
+          "external": 26210063
+        }
+      },
+      "warm": {
+        "hit": true,
+        "attempts": 5,
+        "quality": 0.95,
+        "format": "image/jpeg",
+        "size": 4215,
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.95
+        },
+        "milliseconds": 118.33966300000003,
+        "peakRssBytes": 102760448,
+        "peakHeapUsedBytes": 10112040,
+        "after": {
+          "rss": 103030784,
+          "heapUsed": 10137256,
+          "arrayBuffers": 12987352,
+          "external": 32201186
+        }
+      },
+      "finalMemory": {
+        "rss": 103030784,
+        "heapUsed": 10143272,
+        "arrayBuffers": 12987352,
+        "external": 32201186
+      }
+    },
+    {
+      "kind": "fit",
+      "case": "jpeg panorama",
+      "format": "image/jpeg",
+      "strategy": "binary",
+      "baseline": {
+        "rss": 79953920,
+        "heapUsed": 8249648,
+        "arrayBuffers": 3680423,
+        "external": 5967400
+      },
+      "wasmImportInitMs": 15.049887000000012,
+      "coreImportMs": 29.91137200000003,
+      "cold": {
+        "hit": true,
+        "attempts": 8,
+        "quality": 0.95,
+        "format": "image/jpeg",
+        "size": 4215,
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.95
+        },
+        "milliseconds": 197.980007,
+        "totalWithInitMs": 242.94126600000004,
+        "peakRssBytes": 101896192,
+        "peakHeapUsedBytes": 9388944,
+        "after": {
+          "rss": 94822400,
+          "heapUsed": 9416864,
+          "arrayBuffers": 7533116,
+          "external": 26789028
+        }
+      },
+      "warm": {
+        "hit": true,
+        "attempts": 8,
+        "quality": 0.95,
+        "format": "image/jpeg",
+        "size": 4215,
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.95
+        },
+        "milliseconds": 148.82097900000002,
+        "peakRssBytes": 99954688,
+        "peakHeapUsedBytes": 10354416,
+        "after": {
+          "rss": 94736384,
+          "heapUsed": 7046624,
+          "arrayBuffers": 3391836,
+          "external": 22647748
+        }
+      },
+      "finalMemory": {
+        "rss": 94736384,
+        "heapUsed": 7063944,
+        "arrayBuffers": 3391836,
+        "external": 22647748
+      }
+    },
+    {
+      "kind": "fit",
+      "case": "jpeg panorama",
+      "format": "image/jpeg",
+      "strategy": "secant",
+      "baseline": {
+        "rss": 81752064,
+        "heapUsed": 8565288,
+        "arrayBuffers": 3680423,
+        "external": 5967400
+      },
+      "wasmImportInitMs": 12.596969000000001,
+      "coreImportMs": 25.34572700000001,
+      "cold": {
+        "hit": true,
+        "attempts": 9,
+        "quality": 0.95,
+        "format": "image/jpeg",
+        "size": 4215,
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.95
+        },
+        "milliseconds": 222.996402,
+        "totalWithInitMs": 260.939098,
+        "peakRssBytes": 96210944,
+        "peakHeapUsedBytes": 9028056,
+        "after": {
+          "rss": 96477184,
+          "heapUsed": 9059896,
+          "arrayBuffers": 7724374,
+          "external": 26981457
+        }
+      },
+      "warm": {
+        "hit": true,
+        "attempts": 9,
+        "quality": 0.95,
+        "format": "image/jpeg",
+        "size": 4215,
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.95
+        },
+        "milliseconds": 163.75232600000004,
+        "peakRssBytes": 101343232,
+        "peakHeapUsedBytes": 10874056,
+        "after": {
+          "rss": 102785024,
+          "heapUsed": 6864360,
+          "arrayBuffers": 3583094,
+          "external": 22840177
+        }
+      },
+      "finalMemory": {
+        "rss": 102785024,
+        "heapUsed": 6895376,
+        "arrayBuffers": 3583094,
+        "external": 22840177
+      }
+    },
+    {
+      "kind": "fit",
+      "case": "jpeg panorama",
+      "format": "image/jpeg",
+      "strategy": "coarse-fine",
+      "baseline": {
+        "rss": 76886016,
+        "heapUsed": 8283736,
+        "arrayBuffers": 3680423,
+        "external": 5967400
+      },
+      "wasmImportInitMs": 14.370382000000006,
+      "coreImportMs": 20.29967099999999,
+      "cold": {
+        "hit": true,
+        "attempts": 7,
+        "quality": 0.95,
+        "format": "image/jpeg",
+        "size": 4215,
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.95
+        },
+        "milliseconds": 195.29247600000002,
+        "totalWithInitMs": 229.96252900000002,
+        "peakRssBytes": 98336768,
+        "peakHeapUsedBytes": 8553392,
+        "after": {
+          "rss": 92577792,
+          "heapUsed": 7660192,
+          "arrayBuffers": 6368802,
+          "external": 25626071
+        }
+      },
+      "warm": {
+        "hit": true,
+        "attempts": 7,
+        "quality": 0.95,
+        "format": "image/jpeg",
+        "size": 4215,
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.95
+        },
+        "milliseconds": 127.010787,
+        "peakRssBytes": 100241408,
+        "peakHeapUsedBytes": 8828592,
+        "after": {
+          "rss": 100511744,
+          "heapUsed": 8849888,
+          "arrayBuffers": 12780984,
+          "external": 32001202
+        }
+      },
+      "finalMemory": {
+        "rss": 100511744,
+        "heapUsed": 8855904,
+        "arrayBuffers": 12780984,
+        "external": 32001202
+      }
+    },
+    {
+      "kind": "fit",
+      "case": "jpeg tall document",
+      "format": "image/jpeg",
+      "strategy": "owner-loop",
+      "baseline": {
+        "rss": 83267584,
+        "heapUsed": 8443808,
+        "arrayBuffers": 3680423,
+        "external": 5967400
+      },
+      "wasmImportInitMs": 14.687855999999982,
+      "coreImportMs": 27.90334900000005,
+      "cold": {
+        "hit": true,
+        "attempts": 19,
+        "quality": 0.81,
+        "format": "image/jpeg",
+        "size": 9962,
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.81
+        },
+        "milliseconds": 463.493911,
+        "totalWithInitMs": 506.0851160000001,
+        "peakRssBytes": 102879232,
+        "peakHeapUsedBytes": 9937616,
+        "after": {
+          "rss": 100274176,
+          "heapUsed": 9964160,
+          "arrayBuffers": 10123856,
+          "external": 29149198
+        }
+      },
+      "warm": {
+        "hit": true,
+        "attempts": 19,
+        "quality": 0.81,
+        "format": "image/jpeg",
+        "size": 9962,
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.81
+        },
+        "milliseconds": 414.558452,
+        "peakRssBytes": 105680896,
+        "peakHeapUsedBytes": 9988032,
+        "after": {
+          "rss": 105951232,
+          "heapUsed": 8867200,
+          "arrayBuffers": 14407714,
+          "external": 33164078
+        }
+      },
+      "finalMemory": {
+        "rss": 105951232,
+        "heapUsed": 8873216,
+        "arrayBuffers": 14407714,
+        "external": 33164078
+      }
+    },
+    {
+      "kind": "fit",
+      "case": "jpeg tall document",
+      "format": "image/jpeg",
+      "strategy": "binary",
+      "baseline": {
+        "rss": 81809408,
+        "heapUsed": 7728448,
+        "arrayBuffers": 3680423,
+        "external": 5967400
+      },
+      "wasmImportInitMs": 13.851372000000026,
+      "coreImportMs": 30.288074999999992,
+      "cold": {
+        "hit": true,
+        "attempts": 8,
+        "quality": 0.81,
+        "format": "image/jpeg",
+        "size": 9962,
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.81
+        },
+        "milliseconds": 216.608319,
+        "totalWithInitMs": 260.747766,
+        "peakRssBytes": 97218560,
+        "peakHeapUsedBytes": 10670664,
+        "after": {
+          "rss": 95744000,
+          "heapUsed": 7340520,
+          "arrayBuffers": 6672160,
+          "external": 25874110
+        }
+      },
+      "warm": {
+        "hit": true,
+        "attempts": 8,
+        "quality": 0.81,
+        "format": "image/jpeg",
+        "size": 9962,
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.81
+        },
+        "milliseconds": 165.376939,
+        "peakRssBytes": 103084032,
+        "peakHeapUsedBytes": 9610960,
+        "after": {
+          "rss": 98570240,
+          "heapUsed": 9631976,
+          "arrayBuffers": 13388580,
+          "external": 32498160
+        }
+      },
+      "finalMemory": {
+        "rss": 98570240,
+        "heapUsed": 9637992,
+        "arrayBuffers": 13388580,
+        "external": 32498160
+      }
+    },
+    {
+      "kind": "fit",
+      "case": "jpeg tall document",
+      "format": "image/jpeg",
+      "strategy": "secant",
+      "baseline": {
+        "rss": 80568320,
+        "heapUsed": 8837648,
+        "arrayBuffers": 3680423,
+        "external": 5967400
+      },
+      "wasmImportInitMs": 14.921001000000047,
+      "coreImportMs": 26.690444000000014,
+      "cold": {
+        "hit": true,
+        "attempts": 8,
+        "quality": 0.81,
+        "format": "image/jpeg",
+        "size": 9962,
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.81
+        },
+        "milliseconds": 207.17185099999995,
+        "totalWithInitMs": 248.783296,
+        "peakRssBytes": 93999104,
+        "peakHeapUsedBytes": 9219112,
+        "after": {
+          "rss": 91385856,
+          "heapUsed": 9247696,
+          "arrayBuffers": 7639036,
+          "external": 26841548
+        }
+      },
+      "warm": {
+        "hit": true,
+        "attempts": 8,
+        "quality": 0.81,
+        "format": "image/jpeg",
+        "size": 9962,
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.81
+        },
+        "milliseconds": 162.39045299999998,
+        "peakRssBytes": 99397632,
+        "peakHeapUsedBytes": 11290128,
+        "after": {
+          "rss": 95895552,
+          "heapUsed": 7554032,
+          "arrayBuffers": 7604444,
+          "external": 26715148
+        }
+      },
+      "finalMemory": {
+        "rss": 95895552,
+        "heapUsed": 7560048,
+        "arrayBuffers": 7604444,
+        "external": 26715148
+      }
+    },
+    {
+      "kind": "fit",
+      "case": "jpeg tall document",
+      "format": "image/jpeg",
+      "strategy": "coarse-fine",
+      "baseline": {
+        "rss": 79388672,
+        "heapUsed": 8230392,
+        "arrayBuffers": 3680423,
+        "external": 5967400
+      },
+      "wasmImportInitMs": 13.310219000000018,
+      "coreImportMs": 20.411982999999964,
+      "cold": {
+        "hit": true,
+        "attempts": 8,
+        "quality": 0.81,
+        "format": "image/jpeg",
+        "size": 9962,
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.81
+        },
+        "milliseconds": 224.97630000000004,
+        "totalWithInitMs": 258.698502,
+        "peakRssBytes": 95051776,
+        "peakHeapUsedBytes": 9557592,
+        "after": {
+          "rss": 95051776,
+          "heapUsed": 9580712,
+          "arrayBuffers": 7638796,
+          "external": 26841868
+        }
+      },
+      "warm": {
+        "hit": true,
+        "attempts": 8,
+        "quality": 0.81,
+        "format": "image/jpeg",
+        "size": 9962,
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.81
+        },
+        "milliseconds": 164.107167,
+        "peakRssBytes": 102387712,
+        "peakHeapUsedBytes": 10768936,
+        "after": {
+          "rss": 98652160,
+          "heapUsed": 7163328,
+          "arrayBuffers": 6370511,
+          "external": 25482335
+        }
+      },
+      "finalMemory": {
+        "rss": 98652160,
+        "heapUsed": 7171440,
+        "arrayBuffers": 6370511,
+        "external": 25482335
+      }
+    },
+    {
+      "kind": "fit",
+      "case": "webp alpha",
+      "format": "image/webp",
+      "strategy": "owner-loop",
+      "baseline": {
+        "rss": 77062144,
+        "heapUsed": 8015480,
+        "arrayBuffers": 3680423,
+        "external": 5967400
+      },
+      "wasmImportInitMs": 20.809751999999946,
+      "coreImportMs": 23.360344999999995,
+      "cold": {
+        "hit": false,
+        "attempts": 50,
+        "milliseconds": 611.084843,
+        "totalWithInitMs": 655.2549399999999,
+        "peakRssBytes": 108331008,
+        "peakHeapUsedBytes": 10060216,
+        "after": {
+          "rss": 108331008,
+          "heapUsed": 10082640,
+          "arrayBuffers": 12407098,
+          "external": 31237881
+        }
+      },
+      "warm": {
+        "hit": false,
+        "attempts": 50,
+        "milliseconds": 472.11817599999983,
+        "peakRssBytes": 111304704,
+        "peakHeapUsedBytes": 10095600,
+        "after": {
+          "rss": 111304704,
+          "heapUsed": 9783392,
+          "arrayBuffers": 12398906,
+          "external": 31229689
+        }
+      },
+      "finalMemory": {
+        "rss": 111304704,
+        "heapUsed": 9828168,
+        "arrayBuffers": 12398906,
+        "external": 31229689
+      }
+    },
+    {
+      "kind": "fit",
+      "case": "webp alpha",
+      "format": "image/webp",
+      "strategy": "binary",
+      "baseline": {
+        "rss": 80461824,
+        "heapUsed": 8865672,
+        "arrayBuffers": 3680423,
+        "external": 5967400
+      },
+      "wasmImportInitMs": 20.96604400000001,
+      "coreImportMs": 22.446405000000027,
+      "cold": {
+        "hit": false,
+        "attempts": 2,
+        "milliseconds": 124.44494199999997,
+        "totalWithInitMs": 167.857391,
+        "peakRssBytes": 84373504,
+        "peakHeapUsedBytes": 10466248,
+        "after": {
+          "rss": 105783296,
+          "heapUsed": 6941824,
+          "arrayBuffers": 2603794,
+          "external": 21689829
+        }
+      },
+      "warm": {
+        "hit": false,
+        "attempts": 2,
+        "milliseconds": 56.40009300000003,
+        "peakRssBytes": 109727744,
+        "peakHeapUsedBytes": 8261648,
+        "after": {
+          "rss": 104943616,
+          "heapUsed": 8332768,
+          "arrayBuffers": 4566572,
+          "external": 23640930
+        }
+      },
+      "finalMemory": {
+        "rss": 104943616,
+        "heapUsed": 8353056,
+        "arrayBuffers": 4566572,
+        "external": 23640930
+      }
+    },
+    {
+      "kind": "fit",
+      "case": "webp alpha",
+      "format": "image/webp",
+      "strategy": "secant",
+      "baseline": {
+        "rss": 76603392,
+        "heapUsed": 7907160,
+        "arrayBuffers": 3680423,
+        "external": 5967400
+      },
+      "wasmImportInitMs": 20.10119199999997,
+      "coreImportMs": 23.809707000000003,
+      "cold": {
+        "hit": false,
+        "attempts": 2,
+        "milliseconds": 130.950085,
+        "totalWithInitMs": 174.86098399999997,
+        "peakRssBytes": 84447232,
+        "peakHeapUsedBytes": 7317368,
+        "after": {
+          "rss": 111050752,
+          "heapUsed": 7422264,
+          "arrayBuffers": 2594722,
+          "external": 21680757
+        }
+      },
+      "warm": {
+        "hit": false,
+        "attempts": 2,
+        "milliseconds": 37.37266299999999,
+        "peakRssBytes": 111050752,
+        "peakHeapUsedBytes": 7445568,
+        "after": {
+          "rss": 121323520,
+          "heapUsed": 8794176,
+          "arrayBuffers": 4557500,
+          "external": 23631858
+        }
+      },
+      "finalMemory": {
+        "rss": 121323520,
+        "heapUsed": 8800432,
+        "arrayBuffers": 4557500,
+        "external": 23631858
+      }
+    },
+    {
+      "kind": "fit",
+      "case": "webp alpha",
+      "format": "image/webp",
+      "strategy": "coarse-fine",
+      "baseline": {
+        "rss": 81399808,
+        "heapUsed": 7230712,
+        "arrayBuffers": 3680423,
+        "external": 5967400
+      },
+      "wasmImportInitMs": 20.34451999999999,
+      "coreImportMs": 24.036502999999982,
+      "cold": {
+        "hit": false,
+        "attempts": 2,
+        "milliseconds": 114.92278000000005,
+        "totalWithInitMs": 159.30380300000002,
+        "peakRssBytes": 88764416,
+        "peakHeapUsedBytes": 9981424,
+        "after": {
+          "rss": 102690816,
+          "heapUsed": 10090624,
+          "arrayBuffers": 2603794,
+          "external": 21689829
+        }
+      },
+      "warm": {
+        "hit": false,
+        "attempts": 2,
+        "milliseconds": 62.517848999999956,
+        "peakRssBytes": 102961152,
+        "peakHeapUsedBytes": 10112584,
+        "after": {
+          "rss": 118919168,
+          "heapUsed": 7704912,
+          "arrayBuffers": 4166815,
+          "external": 23241173
+        }
+      },
+      "finalMemory": {
+        "rss": 118919168,
+        "heapUsed": 7711168,
+        "arrayBuffers": 4166815,
+        "external": 23241173
+      }
+    },
+    {
+      "kind": "fit",
+      "case": "webp gradient",
+      "format": "image/webp",
+      "strategy": "owner-loop",
+      "baseline": {
+        "rss": 78721024,
+        "heapUsed": 7510912,
+        "arrayBuffers": 3680423,
+        "external": 5967400
+      },
+      "wasmImportInitMs": 22.335354999999993,
+      "coreImportMs": 20.81244099999998,
+      "cold": {
+        "hit": true,
+        "attempts": 12,
+        "quality": 0.88,
+        "format": "image/webp",
+        "size": 1156,
+        "params": {
+          "format": "image/webp",
+          "quality": 0.88,
+          "variant": {
+            "effort": 0.15
+          }
+        },
+        "milliseconds": 151.739438,
+        "totalWithInitMs": 194.88723399999998,
+        "peakRssBytes": 93925376,
+        "peakHeapUsedBytes": 7901120,
+        "after": {
+          "rss": 104468480,
+          "heapUsed": 8227256,
+          "arrayBuffers": 4572446,
+          "external": 23641715
+        }
+      },
+      "warm": {
+        "hit": true,
+        "attempts": 12,
+        "quality": 0.88,
+        "format": "image/webp",
+        "size": 1156,
+        "params": {
+          "format": "image/webp",
+          "quality": 0.88,
+          "variant": {
+            "effort": 0.15
+          }
+        },
+        "milliseconds": 57.517517999999995,
+        "peakRssBytes": 106893312,
+        "peakHeapUsedBytes": 9868544,
+        "after": {
+          "rss": 94003200,
+          "heapUsed": 9891312,
+          "arrayBuffers": 8504756,
+          "external": 27545582
+        }
+      },
+      "finalMemory": {
+        "rss": 94003200,
+        "heapUsed": 9899752,
+        "arrayBuffers": 8504756,
+        "external": 27545582
+      }
+    },
+    {
+      "kind": "fit",
+      "case": "webp gradient",
+      "format": "image/webp",
+      "strategy": "binary",
+      "baseline": {
+        "rss": 78790656,
+        "heapUsed": 6844400,
+        "arrayBuffers": 3680423,
+        "external": 5967400
+      },
+      "wasmImportInitMs": 20.796217000000013,
+      "coreImportMs": 16.33048500000001,
+      "cold": {
+        "hit": true,
+        "attempts": 8,
+        "quality": 0.88,
+        "format": "image/webp",
+        "size": 1156,
+        "params": {
+          "format": "image/webp",
+          "quality": 0.88,
+          "variant": {
+            "effort": 0.15
+          }
+        },
+        "milliseconds": 114.24909500000001,
+        "totalWithInitMs": 151.37579700000003,
+        "peakRssBytes": 95539200,
+        "peakHeapUsedBytes": 10215392,
+        "after": {
+          "rss": 94969856,
+          "heapUsed": 10372600,
+          "arrayBuffers": 3757194,
+          "external": 22843233
+        }
+      },
+      "warm": {
+        "hit": true,
+        "attempts": 8,
+        "quality": 0.88,
+        "format": "image/webp",
+        "size": 1156,
+        "params": {
+          "format": "image/webp",
+          "quality": 0.88,
+          "variant": {
+            "effort": 0.15
+          }
+        },
+        "milliseconds": 63.16729700000002,
+        "peakRssBytes": 100642816,
+        "peakHeapUsedBytes": 10396808,
+        "after": {
+          "rss": 107773952,
+          "heapUsed": 7998744,
+          "arrayBuffers": 5127491,
+          "external": 24201857
+        }
+      },
+      "finalMemory": {
+        "rss": 105676800,
+        "heapUsed": 8004760,
+        "arrayBuffers": 5127491,
+        "external": 24201857
+      }
+    },
+    {
+      "kind": "fit",
+      "case": "webp gradient",
+      "format": "image/webp",
+      "strategy": "secant",
+      "baseline": {
+        "rss": 79507456,
+        "heapUsed": 7996312,
+        "arrayBuffers": 3680423,
+        "external": 5967400
+      },
+      "wasmImportInitMs": 20.926804000000004,
+      "coreImportMs": 17.96680200000003,
+      "cold": {
+        "hit": true,
+        "attempts": 8,
+        "quality": 0.88,
+        "format": "image/webp",
+        "size": 1156,
+        "params": {
+          "format": "image/webp",
+          "quality": 0.88,
+          "variant": {
+            "effort": 0.15
+          }
+        },
+        "milliseconds": 99.467355,
+        "totalWithInitMs": 138.36096100000003,
+        "peakRssBytes": 93380608,
+        "peakHeapUsedBytes": 10812896,
+        "after": {
+          "rss": 97001472,
+          "heapUsed": 7141000,
+          "arrayBuffers": 3564722,
+          "external": 22650197
+        }
+      },
+      "warm": {
+        "hit": true,
+        "attempts": 8,
+        "quality": 0.88,
+        "format": "image/webp",
+        "size": 1156,
+        "params": {
+          "format": "image/webp",
+          "quality": 0.88,
+          "variant": {
+            "effort": 0.15
+          }
+        },
+        "milliseconds": 41.120541,
+        "peakRssBytes": 97001472,
+        "peakHeapUsedBytes": 7164376,
+        "after": {
+          "rss": 108081152,
+          "heapUsed": 8718280,
+          "arrayBuffers": 6690220,
+          "external": 25763458
+        }
+      },
+      "finalMemory": {
+        "rss": 108081152,
+        "heapUsed": 8728200,
+        "arrayBuffers": 6690220,
+        "external": 25763458
+      }
+    },
+    {
+      "kind": "fit",
+      "case": "webp gradient",
+      "format": "image/webp",
+      "strategy": "coarse-fine",
+      "baseline": {
+        "rss": 82558976,
+        "heapUsed": 8659600,
+        "arrayBuffers": 3680423,
+        "external": 5967400
+      },
+      "wasmImportInitMs": 21.476584000000003,
+      "coreImportMs": 20.99186499999996,
+      "cold": {
+        "hit": true,
+        "attempts": 7,
+        "quality": 0.88,
+        "format": "image/webp",
+        "size": 1156,
+        "params": {
+          "format": "image/webp",
+          "quality": 0.88,
+          "variant": {
+            "effort": 0.15
+          }
+        },
+        "milliseconds": 98.415953,
+        "totalWithInitMs": 140.88440199999997,
+        "peakRssBytes": 99266560,
+        "peakHeapUsedBytes": 8865720,
+        "after": {
+          "rss": 101158912,
+          "heapUsed": 8885008,
+          "arrayBuffers": 3570478,
+          "external": 22657171
+        }
+      },
+      "warm": {
+        "hit": true,
+        "attempts": 7,
+        "quality": 0.88,
+        "format": "image/webp",
+        "size": 1156,
+        "params": {
+          "format": "image/webp",
+          "quality": 0.88,
+          "variant": {
+            "effort": 0.15
+          }
+        },
+        "milliseconds": 38.855232,
+        "peakRssBytes": 101158912,
+        "peakHeapUsedBytes": 8905176,
+        "after": {
+          "rss": 105099264,
+          "heapUsed": 10655928,
+          "arrayBuffers": 6499940,
+          "external": 25575614
+        }
+      },
+      "finalMemory": {
+        "rss": 105099264,
+        "heapUsed": 10662248,
+        "arrayBuffers": 6499940,
+        "external": 25575614
+      }
+    }
+  ]
+}

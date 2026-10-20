@@ -1,0 +1,1183 @@
+{
+  "generatedAt": "2026-10-20T05:15:24.101Z",
+  "browser": "firefox",
+  "capabilities": {
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64; rv:157.0) Gecko/20100101 Firefox/157.0",
+    "crossOriginIsolated": true,
+    "createImageBitmap": "function",
+    "OffscreenCanvas": "function",
+    "CompressionStream": "function",
+    "DecompressionStream": "function",
+    "performanceMemory": false
+  },
+  "formats": [
+    {
+      "format": "image/jpeg",
+      "firstEncodeMs": 73.28,
+      "firstSize": 2987,
+      "firstPeakUsedJsHeapBytes": null,
+      "warmEncodeMs": [
+        13.779999999999973,
+        13.659999999999968,
+        14.519999999999982
+      ],
+      "warmSizes": [
+        2987,
+        2987,
+        2987
+      ],
+      "warmPeakUsedJsHeapBytes": null
+    },
+    {
+      "format": "image/png",
+      "firstEncodeMs": 58.079999999999984,
+      "firstSize": 78646,
+      "firstPeakUsedJsHeapBytes": null,
+      "warmEncodeMs": [
+        8.640000000000015,
+        3.0600000000000307,
+        16.04000000000002
+      ],
+      "warmSizes": [
+        78646,
+        78646,
+        78646
+      ],
+      "warmPeakUsedJsHeapBytes": null
+    },
+    {
+      "format": "image/webp",
+      "firstEncodeMs": 50.66,
+      "firstSize": 818,
+      "firstPeakUsedJsHeapBytes": null,
+      "warmEncodeMs": [
+        10.740000000000009,
+        8.759999999999991,
+        8.280000000000001
+      ],
+      "warmSizes": [
+        818,
+        818,
+        818
+      ],
+      "warmPeakUsedJsHeapBytes": null
+    },
+    {
+      "format": "image/avif",
+      "firstEncodeMs": 250.44,
+      "firstSize": 649,
+      "firstPeakUsedJsHeapBytes": null,
+      "warmEncodeMs": [
+        67.77999999999997,
+        45.51999999999998,
+        43
+      ],
+      "warmSizes": [
+        649,
+        649,
+        649
+      ],
+      "warmPeakUsedJsHeapBytes": null
+    }
+  ],
+  "pngOptimizers": [
+    {
+      "engine": "oxipng",
+      "setupPngEncodeMs": 31.160000000000025,
+      "inputSize": 78646,
+      "firstOptimizeMs": 134.7,
+      "firstSize": 1236,
+      "firstOptimized": true,
+      "firstPeakUsedJsHeapBytes": null,
+      "warmOptimizeMs": [
+        55.51999999999998,
+        54.920000000000016,
+        54.74000000000001
+      ],
+      "warmSizes": [
+        1236,
+        1236,
+        1236
+      ],
+      "warmOptimized": [
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "engine": "compression-stream",
+      "setupPngEncodeMs": 33.30000000000001,
+      "inputSize": 78646,
+      "firstOptimizeMs": 15.819999999999993,
+      "firstSize": 3582,
+      "firstOptimized": true,
+      "firstPeakUsedJsHeapBytes": null,
+      "warmOptimizeMs": [
+        5.599999999999994,
+        5.219999999999999,
+        4.920000000000016
+      ],
+      "warmSizes": [
+        3582,
+        3582,
+        3582
+      ],
+      "warmOptimized": [
+        true,
+        true,
+        true
+      ]
+    }
+  ],
+  "fit": [
+    {
+      "case": "jpeg photo",
+      "strategy": "owner-loop",
+      "cold": {
+        "hit": true,
+        "attempts": 7,
+        "quality": 0.93,
+        "format": "image/jpeg",
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.93
+        },
+        "size": 4375,
+        "milliseconds": 223.07999999999998,
+        "peakUsedJsHeapBytes": null
+      },
+      "warm": {
+        "hit": true,
+        "attempts": 7,
+        "quality": 0.93,
+        "format": "image/jpeg",
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.93
+        },
+        "size": 4375,
+        "milliseconds": 141.59999999999997,
+        "peakUsedJsHeapBytes": null
+      }
+    },
+    {
+      "case": "jpeg photo",
+      "strategy": "binary",
+      "cold": {
+        "hit": true,
+        "attempts": 8,
+        "quality": 0.93,
+        "format": "image/jpeg",
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.93
+        },
+        "size": 4375,
+        "milliseconds": 232.57999999999998,
+        "peakUsedJsHeapBytes": null
+      },
+      "warm": {
+        "hit": true,
+        "attempts": 8,
+        "quality": 0.93,
+        "format": "image/jpeg",
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.93
+        },
+        "size": 4375,
+        "milliseconds": 131.88000000000005,
+        "peakUsedJsHeapBytes": null
+      }
+    },
+    {
+      "case": "jpeg photo",
+      "strategy": "secant",
+      "cold": {
+        "hit": true,
+        "attempts": 8,
+        "quality": 0.93,
+        "format": "image/jpeg",
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.93
+        },
+        "size": 4375,
+        "milliseconds": 159.04,
+        "peakUsedJsHeapBytes": null
+      },
+      "warm": {
+        "hit": true,
+        "attempts": 8,
+        "quality": 0.93,
+        "format": "image/jpeg",
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.93
+        },
+        "size": 4375,
+        "milliseconds": 115.57999999999998,
+        "peakUsedJsHeapBytes": null
+      }
+    },
+    {
+      "case": "jpeg photo",
+      "strategy": "coarse-fine",
+      "cold": {
+        "hit": true,
+        "attempts": 7,
+        "quality": 0.93,
+        "format": "image/jpeg",
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.93
+        },
+        "size": 4375,
+        "milliseconds": 159.2,
+        "peakUsedJsHeapBytes": null
+      },
+      "warm": {
+        "hit": true,
+        "attempts": 7,
+        "quality": 0.93,
+        "format": "image/jpeg",
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.93
+        },
+        "size": 4375,
+        "milliseconds": 110.82000000000005,
+        "peakUsedJsHeapBytes": null
+      }
+    },
+    {
+      "case": "jpeg noise",
+      "strategy": "owner-loop",
+      "cold": {
+        "hit": true,
+        "attempts": 15,
+        "quality": 0.85,
+        "format": "image/jpeg",
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.85
+        },
+        "size": 23312,
+        "milliseconds": 1253,
+        "peakUsedJsHeapBytes": null
+      },
+      "warm": {
+        "hit": true,
+        "attempts": 15,
+        "quality": 0.85,
+        "format": "image/jpeg",
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.85
+        },
+        "size": 23312,
+        "milliseconds": 1195.9599999999998,
+        "peakUsedJsHeapBytes": null
+      }
+    },
+    {
+      "case": "jpeg noise",
+      "strategy": "binary",
+      "cold": {
+        "hit": true,
+        "attempts": 8,
+        "quality": 0.85,
+        "format": "image/jpeg",
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.85
+        },
+        "size": 23312,
+        "milliseconds": 437.86,
+        "peakUsedJsHeapBytes": null
+      },
+      "warm": {
+        "hit": true,
+        "attempts": 8,
+        "quality": 0.85,
+        "format": "image/jpeg",
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.85
+        },
+        "size": 23312,
+        "milliseconds": 388.4599999999999,
+        "peakUsedJsHeapBytes": null
+      }
+    },
+    {
+      "case": "jpeg noise",
+      "strategy": "secant",
+      "cold": {
+        "hit": true,
+        "attempts": 8,
+        "quality": 0.85,
+        "format": "image/jpeg",
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.85
+        },
+        "size": 23312,
+        "milliseconds": 437.14000000000004,
+        "peakUsedJsHeapBytes": null
+      },
+      "warm": {
+        "hit": true,
+        "attempts": 8,
+        "quality": 0.85,
+        "format": "image/jpeg",
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.85
+        },
+        "size": 23312,
+        "milliseconds": 383.91999999999996,
+        "peakUsedJsHeapBytes": null
+      }
+    },
+    {
+      "case": "jpeg noise",
+      "strategy": "coarse-fine",
+      "cold": {
+        "hit": true,
+        "attempts": 8,
+        "quality": 0.85,
+        "format": "image/jpeg",
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.85
+        },
+        "size": 23312,
+        "milliseconds": 428.38,
+        "peakUsedJsHeapBytes": null
+      },
+      "warm": {
+        "hit": true,
+        "attempts": 8,
+        "quality": 0.85,
+        "format": "image/jpeg",
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.85
+        },
+        "size": 23312,
+        "milliseconds": 383.2800000000001,
+        "peakUsedJsHeapBytes": null
+      }
+    },
+    {
+      "case": "jpeg manga",
+      "strategy": "owner-loop",
+      "cold": {
+        "hit": true,
+        "attempts": 14,
+        "quality": 0.86,
+        "format": "image/jpeg",
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.86
+        },
+        "size": 17755,
+        "milliseconds": 550.3,
+        "peakUsedJsHeapBytes": null
+      },
+      "warm": {
+        "hit": true,
+        "attempts": 14,
+        "quality": 0.86,
+        "format": "image/jpeg",
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.86
+        },
+        "size": 17755,
+        "milliseconds": 481.51999999999987,
+        "peakUsedJsHeapBytes": null
+      }
+    },
+    {
+      "case": "jpeg manga",
+      "strategy": "binary",
+      "cold": {
+        "hit": true,
+        "attempts": 7,
+        "quality": 0.86,
+        "format": "image/jpeg",
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.86
+        },
+        "size": 17755,
+        "milliseconds": 252.86,
+        "peakUsedJsHeapBytes": null
+      },
+      "warm": {
+        "hit": true,
+        "attempts": 7,
+        "quality": 0.86,
+        "format": "image/jpeg",
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.86
+        },
+        "size": 17755,
+        "milliseconds": 205.05999999999995,
+        "peakUsedJsHeapBytes": null
+      }
+    },
+    {
+      "case": "jpeg manga",
+      "strategy": "secant",
+      "cold": {
+        "hit": true,
+        "attempts": 9,
+        "quality": 0.86,
+        "format": "image/jpeg",
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.86
+        },
+        "size": 17755,
+        "milliseconds": 272.02,
+        "peakUsedJsHeapBytes": null
+      },
+      "warm": {
+        "hit": true,
+        "attempts": 9,
+        "quality": 0.86,
+        "format": "image/jpeg",
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.86
+        },
+        "size": 17755,
+        "milliseconds": 233.62,
+        "peakUsedJsHeapBytes": null
+      }
+    },
+    {
+      "case": "jpeg manga",
+      "strategy": "coarse-fine",
+      "cold": {
+        "hit": true,
+        "attempts": 6,
+        "quality": 0.86,
+        "format": "image/jpeg",
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.86
+        },
+        "size": 17755,
+        "milliseconds": 238.84,
+        "peakUsedJsHeapBytes": null
+      },
+      "warm": {
+        "hit": true,
+        "attempts": 6,
+        "quality": 0.86,
+        "format": "image/jpeg",
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.86
+        },
+        "size": 17755,
+        "milliseconds": 184.56,
+        "peakUsedJsHeapBytes": null
+      }
+    },
+    {
+      "case": "jpeg UI",
+      "strategy": "owner-loop",
+      "cold": {
+        "hit": true,
+        "attempts": 5,
+        "quality": 0.95,
+        "format": "image/jpeg",
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.95
+        },
+        "size": 10714,
+        "milliseconds": 153.32,
+        "peakUsedJsHeapBytes": null
+      },
+      "warm": {
+        "hit": true,
+        "attempts": 5,
+        "quality": 0.95,
+        "format": "image/jpeg",
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.95
+        },
+        "size": 10714,
+        "milliseconds": 117.89999999999998,
+        "peakUsedJsHeapBytes": null
+      }
+    },
+    {
+      "case": "jpeg UI",
+      "strategy": "binary",
+      "cold": {
+        "hit": true,
+        "attempts": 8,
+        "quality": 0.95,
+        "format": "image/jpeg",
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.95
+        },
+        "size": 10714,
+        "milliseconds": 197.29999999999998,
+        "peakUsedJsHeapBytes": null
+      },
+      "warm": {
+        "hit": true,
+        "attempts": 8,
+        "quality": 0.95,
+        "format": "image/jpeg",
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.95
+        },
+        "size": 10714,
+        "milliseconds": 140.91999999999996,
+        "peakUsedJsHeapBytes": null
+      }
+    },
+    {
+      "case": "jpeg UI",
+      "strategy": "secant",
+      "cold": {
+        "hit": true,
+        "attempts": 9,
+        "quality": 0.95,
+        "format": "image/jpeg",
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.95
+        },
+        "size": 10714,
+        "milliseconds": 201.49999999999997,
+        "peakUsedJsHeapBytes": null
+      },
+      "warm": {
+        "hit": true,
+        "attempts": 9,
+        "quality": 0.95,
+        "format": "image/jpeg",
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.95
+        },
+        "size": 10714,
+        "milliseconds": 163.56000000000006,
+        "peakUsedJsHeapBytes": null
+      }
+    },
+    {
+      "case": "jpeg UI",
+      "strategy": "coarse-fine",
+      "cold": {
+        "hit": true,
+        "attempts": 7,
+        "quality": 0.95,
+        "format": "image/jpeg",
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.95
+        },
+        "size": 10714,
+        "milliseconds": 180.11999999999998,
+        "peakUsedJsHeapBytes": null
+      },
+      "warm": {
+        "hit": true,
+        "attempts": 7,
+        "quality": 0.95,
+        "format": "image/jpeg",
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.95
+        },
+        "size": 10714,
+        "milliseconds": 141.72000000000003,
+        "peakUsedJsHeapBytes": null
+      }
+    },
+    {
+      "case": "jpeg moire",
+      "strategy": "owner-loop",
+      "cold": {
+        "hit": true,
+        "attempts": 11,
+        "quality": 0.89,
+        "format": "image/jpeg",
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.89
+        },
+        "size": 21726,
+        "milliseconds": 613.6,
+        "peakUsedJsHeapBytes": null
+      },
+      "warm": {
+        "hit": true,
+        "attempts": 11,
+        "quality": 0.89,
+        "format": "image/jpeg",
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.89
+        },
+        "size": 21726,
+        "milliseconds": 539.5799999999999,
+        "peakUsedJsHeapBytes": null
+      }
+    },
+    {
+      "case": "jpeg moire",
+      "strategy": "binary",
+      "cold": {
+        "hit": true,
+        "attempts": 7,
+        "quality": 0.89,
+        "format": "image/jpeg",
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.89
+        },
+        "size": 21726,
+        "milliseconds": 310.48,
+        "peakUsedJsHeapBytes": null
+      },
+      "warm": {
+        "hit": true,
+        "attempts": 7,
+        "quality": 0.89,
+        "format": "image/jpeg",
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.89
+        },
+        "size": 21726,
+        "milliseconds": 298.6,
+        "peakUsedJsHeapBytes": null
+      }
+    },
+    {
+      "case": "jpeg moire",
+      "strategy": "secant",
+      "cold": {
+        "hit": true,
+        "attempts": 8,
+        "quality": 0.89,
+        "format": "image/jpeg",
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.89
+        },
+        "size": 21726,
+        "milliseconds": 319.76000000000005,
+        "peakUsedJsHeapBytes": null
+      },
+      "warm": {
+        "hit": true,
+        "attempts": 8,
+        "quality": 0.89,
+        "format": "image/jpeg",
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.89
+        },
+        "size": 21726,
+        "milliseconds": 263.30000000000007,
+        "peakUsedJsHeapBytes": null
+      }
+    },
+    {
+      "case": "jpeg moire",
+      "strategy": "coarse-fine",
+      "cold": {
+        "hit": true,
+        "attempts": 6,
+        "quality": 0.89,
+        "format": "image/jpeg",
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.89
+        },
+        "size": 21726,
+        "milliseconds": 282.12,
+        "peakUsedJsHeapBytes": null
+      },
+      "warm": {
+        "hit": true,
+        "attempts": 6,
+        "quality": 0.89,
+        "format": "image/jpeg",
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.89
+        },
+        "size": 21726,
+        "milliseconds": 235.55999999999995,
+        "peakUsedJsHeapBytes": null
+      }
+    },
+    {
+      "case": "jpeg panorama",
+      "strategy": "owner-loop",
+      "cold": {
+        "hit": true,
+        "attempts": 5,
+        "quality": 0.95,
+        "format": "image/jpeg",
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.95
+        },
+        "size": 4215,
+        "milliseconds": 166.9,
+        "peakUsedJsHeapBytes": null
+      },
+      "warm": {
+        "hit": true,
+        "attempts": 5,
+        "quality": 0.95,
+        "format": "image/jpeg",
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.95
+        },
+        "size": 4215,
+        "milliseconds": 124.97999999999996,
+        "peakUsedJsHeapBytes": null
+      }
+    },
+    {
+      "case": "jpeg panorama",
+      "strategy": "binary",
+      "cold": {
+        "hit": true,
+        "attempts": 8,
+        "quality": 0.95,
+        "format": "image/jpeg",
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.95
+        },
+        "size": 4215,
+        "milliseconds": 182.21999999999997,
+        "peakUsedJsHeapBytes": null
+      },
+      "warm": {
+        "hit": true,
+        "attempts": 8,
+        "quality": 0.95,
+        "format": "image/jpeg",
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.95
+        },
+        "size": 4215,
+        "milliseconds": 143.47999999999996,
+        "peakUsedJsHeapBytes": null
+      }
+    },
+    {
+      "case": "jpeg panorama",
+      "strategy": "secant",
+      "cold": {
+        "hit": true,
+        "attempts": 9,
+        "quality": 0.95,
+        "format": "image/jpeg",
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.95
+        },
+        "size": 4215,
+        "milliseconds": 190.57999999999998,
+        "peakUsedJsHeapBytes": null
+      },
+      "warm": {
+        "hit": true,
+        "attempts": 9,
+        "quality": 0.95,
+        "format": "image/jpeg",
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.95
+        },
+        "size": 4215,
+        "milliseconds": 152.01999999999998,
+        "peakUsedJsHeapBytes": null
+      }
+    },
+    {
+      "case": "jpeg panorama",
+      "strategy": "coarse-fine",
+      "cold": {
+        "hit": true,
+        "attempts": 7,
+        "quality": 0.95,
+        "format": "image/jpeg",
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.95
+        },
+        "size": 4215,
+        "milliseconds": 175.58,
+        "peakUsedJsHeapBytes": null
+      },
+      "warm": {
+        "hit": true,
+        "attempts": 7,
+        "quality": 0.95,
+        "format": "image/jpeg",
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.95
+        },
+        "size": 4215,
+        "milliseconds": 127.75999999999999,
+        "peakUsedJsHeapBytes": null
+      }
+    },
+    {
+      "case": "jpeg tall document",
+      "strategy": "owner-loop",
+      "cold": {
+        "hit": true,
+        "attempts": 19,
+        "quality": 0.81,
+        "format": "image/jpeg",
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.81
+        },
+        "size": 9962,
+        "milliseconds": 493.56000000000006,
+        "peakUsedJsHeapBytes": null
+      },
+      "warm": {
+        "hit": true,
+        "attempts": 19,
+        "quality": 0.81,
+        "format": "image/jpeg",
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.81
+        },
+        "size": 9962,
+        "milliseconds": 535.6400000000001,
+        "peakUsedJsHeapBytes": null
+      }
+    },
+    {
+      "case": "jpeg tall document",
+      "strategy": "binary",
+      "cold": {
+        "hit": true,
+        "attempts": 8,
+        "quality": 0.81,
+        "format": "image/jpeg",
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.81
+        },
+        "size": 9962,
+        "milliseconds": 225.40000000000003,
+        "peakUsedJsHeapBytes": null
+      },
+      "warm": {
+        "hit": true,
+        "attempts": 8,
+        "quality": 0.81,
+        "format": "image/jpeg",
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.81
+        },
+        "size": 9962,
+        "milliseconds": 169.44,
+        "peakUsedJsHeapBytes": null
+      }
+    },
+    {
+      "case": "jpeg tall document",
+      "strategy": "secant",
+      "cold": {
+        "hit": true,
+        "attempts": 8,
+        "quality": 0.81,
+        "format": "image/jpeg",
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.81
+        },
+        "size": 9962,
+        "milliseconds": 223.01999999999998,
+        "peakUsedJsHeapBytes": null
+      },
+      "warm": {
+        "hit": true,
+        "attempts": 8,
+        "quality": 0.81,
+        "format": "image/jpeg",
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.81
+        },
+        "size": 9962,
+        "milliseconds": 176.11999999999995,
+        "peakUsedJsHeapBytes": null
+      }
+    },
+    {
+      "case": "jpeg tall document",
+      "strategy": "coarse-fine",
+      "cold": {
+        "hit": true,
+        "attempts": 8,
+        "quality": 0.81,
+        "format": "image/jpeg",
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.81
+        },
+        "size": 9962,
+        "milliseconds": 221.70000000000002,
+        "peakUsedJsHeapBytes": null
+      },
+      "warm": {
+        "hit": true,
+        "attempts": 8,
+        "quality": 0.81,
+        "format": "image/jpeg",
+        "params": {
+          "format": "image/jpeg",
+          "quality": 0.81
+        },
+        "size": 9962,
+        "milliseconds": 208.03999999999996,
+        "peakUsedJsHeapBytes": null
+      }
+    },
+    {
+      "case": "webp alpha",
+      "strategy": "owner-loop",
+      "cold": {
+        "hit": false,
+        "attempts": 50,
+        "milliseconds": 600.1,
+        "peakUsedJsHeapBytes": null
+      },
+      "warm": {
+        "hit": false,
+        "attempts": 50,
+        "milliseconds": 460.62,
+        "peakUsedJsHeapBytes": null
+      }
+    },
+    {
+      "case": "webp alpha",
+      "strategy": "binary",
+      "cold": {
+        "hit": false,
+        "attempts": 2,
+        "milliseconds": 99.18,
+        "peakUsedJsHeapBytes": null
+      },
+      "warm": {
+        "hit": false,
+        "attempts": 2,
+        "milliseconds": 48.21999999999997,
+        "peakUsedJsHeapBytes": null
+      }
+    },
+    {
+      "case": "webp alpha",
+      "strategy": "secant",
+      "cold": {
+        "hit": false,
+        "attempts": 2,
+        "milliseconds": 90.64000000000001,
+        "peakUsedJsHeapBytes": null
+      },
+      "warm": {
+        "hit": false,
+        "attempts": 2,
+        "milliseconds": 37.14000000000004,
+        "peakUsedJsHeapBytes": null
+      }
+    },
+    {
+      "case": "webp alpha",
+      "strategy": "coarse-fine",
+      "cold": {
+        "hit": false,
+        "attempts": 2,
+        "milliseconds": 89.97999999999996,
+        "peakUsedJsHeapBytes": null
+      },
+      "warm": {
+        "hit": false,
+        "attempts": 2,
+        "milliseconds": 37.660000000000025,
+        "peakUsedJsHeapBytes": null
+      }
+    },
+    {
+      "case": "webp gradient",
+      "strategy": "owner-loop",
+      "cold": {
+        "hit": true,
+        "attempts": 12,
+        "quality": 0.88,
+        "format": "image/webp",
+        "params": {
+          "format": "image/webp",
+          "quality": 0.88,
+          "variant": {
+            "effort": 0.15
+          }
+        },
+        "size": 1156,
+        "milliseconds": 116.03999999999999,
+        "peakUsedJsHeapBytes": null
+      },
+      "warm": {
+        "hit": true,
+        "attempts": 12,
+        "quality": 0.88,
+        "format": "image/webp",
+        "params": {
+          "format": "image/webp",
+          "quality": 0.88,
+          "variant": {
+            "effort": 0.15
+          }
+        },
+        "size": 1156,
+        "milliseconds": 60.360000000000014,
+        "peakUsedJsHeapBytes": null
+      }
+    },
+    {
+      "case": "webp gradient",
+      "strategy": "binary",
+      "cold": {
+        "hit": true,
+        "attempts": 8,
+        "quality": 0.88,
+        "format": "image/webp",
+        "params": {
+          "format": "image/webp",
+          "quality": 0.88,
+          "variant": {
+            "effort": 0.15
+          }
+        },
+        "size": 1156,
+        "milliseconds": 89.33999999999997,
+        "peakUsedJsHeapBytes": null
+      },
+      "warm": {
+        "hit": true,
+        "attempts": 8,
+        "quality": 0.88,
+        "format": "image/webp",
+        "params": {
+          "format": "image/webp",
+          "quality": 0.88,
+          "variant": {
+            "effort": 0.15
+          }
+        },
+        "size": 1156,
+        "milliseconds": 38,
+        "peakUsedJsHeapBytes": null
+      }
+    },
+    {
+      "case": "webp gradient",
+      "strategy": "secant",
+      "cold": {
+        "hit": true,
+        "attempts": 8,
+        "quality": 0.88,
+        "format": "image/webp",
+        "params": {
+          "format": "image/webp",
+          "quality": 0.88,
+          "variant": {
+            "effort": 0.15
+          }
+        },
+        "size": 1156,
+        "milliseconds": 82.73999999999998,
+        "peakUsedJsHeapBytes": null
+      },
+      "warm": {
+        "hit": true,
+        "attempts": 8,
+        "quality": 0.88,
+        "format": "image/webp",
+        "params": {
+          "format": "image/webp",
+          "quality": 0.88,
+          "variant": {
+            "effort": 0.15
+          }
+        },
+        "size": 1156,
+        "milliseconds": 32.74000000000001,
+        "peakUsedJsHeapBytes": null
+      }
+    },
+    {
+      "case": "webp gradient",
+      "strategy": "coarse-fine",
+      "cold": {
+        "hit": true,
+        "attempts": 7,
+        "quality": 0.88,
+        "format": "image/webp",
+        "params": {
+          "format": "image/webp",
+          "quality": 0.88,
+          "variant": {
+            "effort": 0.15
+          }
+        },
+        "size": 1156,
+        "milliseconds": 106.36000000000001,
+        "peakUsedJsHeapBytes": null
+      },
+      "warm": {
+        "hit": true,
+        "attempts": 7,
+        "quality": 0.88,
+        "format": "image/webp",
+        "params": {
+          "format": "image/webp",
+          "quality": 0.88,
+          "variant": {
+            "effort": 0.15
+          }
+        },
+        "size": 1156,
+        "milliseconds": 33.51999999999998,
+        "peakUsedJsHeapBytes": null
+      }
+    }
+  ]
+}

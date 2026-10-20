@@ -1,0 +1,78 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  library:
+    name: Typecheck, tests, build, consumer
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci --ignore-scripts --no-audit --no-fund
+      - run: npm run typecheck
+      - run: npm test -- --reporter=dot
+      - run: npm run build
+      - run: npm run sizes
+      - run: npm run budget
+      - run: npm run consumer:smoke
+
+  browser-smoke:
+    name: Browser fixtures and demo smoke (${{ matrix.browser }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chromium, firefox, webkit]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci --ignore-scripts --no-audit --no-fund
+      - run: npm run build
+      - run: npm run demo:build
+      - run: npx playwright install --with-deps ${{ matrix.browser }}
+      - run: npm run fixtures:browser -- ${{ matrix.browser }}
+      - name: Start preview and run smoke
+        shell: bash
+        run: |
+          npx vite preview --config demo/vite.config.ts --host 127.0.0.1 --port 4173 > /tmp/vite-preview.log 2>&1 &
+          echo $! > /tmp/vite-preview.pid
+          for i in $(seq 1 60); do
+            if curl -fsS http://127.0.0.1:4173/ >/dev/null; then break; fi
+            sleep 1
+          done
+          node scripts/smoke-demo.mjs http://127.0.0.1:4173/ ${{ matrix.browser }}
+          kill "$(cat /tmp/vite-preview.pid)"
+
+  bench:
+    name: Benchmarks (report only)
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci --ignore-scripts --no-audit --no-fund
+      - run: npm run bench
+      - run: npm run bench:corpus
+      - run: npm run bench:profile
+      - run: npx playwright install --with-deps chromium firefox webkit
+      - run: npm run bench:browser -- all
+      - uses: actions/upload-artifact@v4
+        with:
+          name: benchmark-results
+          path: benchmark-results/

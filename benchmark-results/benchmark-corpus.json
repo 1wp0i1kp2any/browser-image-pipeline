@@ -1,0 +1,257 @@
+{
+  "generatedAt": "2026-10-20T05:09:20.828Z",
+  "environment": {
+    "node": "v20.20.2",
+    "platform": "linux",
+    "arch": "x64"
+  },
+  "strategyCases": [
+    {
+      "name": "synthetic jpeg-like 1/(1.02-q)",
+      "ownerAttempts": 9,
+      "secantAttempts": 9,
+      "modelAttempts": 7,
+      "same": true,
+      "milliseconds": 2.96618600000005,
+      "ownerQuality": 0.91,
+      "ownerSize": 20000
+    },
+    {
+      "name": "synthetic exponential",
+      "ownerAttempts": 26,
+      "secantAttempts": 8,
+      "modelAttempts": 11,
+      "same": true,
+      "milliseconds": 1.6386449999999968,
+      "ownerQuality": 0.74,
+      "ownerSize": 11897
+    },
+    {
+      "name": "synthetic power",
+      "ownerAttempts": 15,
+      "secantAttempts": 8,
+      "modelAttempts": 9,
+      "same": true,
+      "milliseconds": 1.4567049999999995,
+      "ownerQuality": 0.85,
+      "ownerSize": 17761
+    },
+    {
+      "name": "synthetic plateau",
+      "ownerAttempts": 17,
+      "secantAttempts": 8,
+      "modelAttempts": 11,
+      "same": true,
+      "milliseconds": 1.5351650000000063,
+      "ownerQuality": 0.83,
+      "ownerSize": 15450
+    },
+    {
+      "name": "synthetic knee",
+      "ownerAttempts": 15,
+      "secantAttempts": 8,
+      "modelAttempts": 8,
+      "same": true,
+      "milliseconds": 1.3081730000000107,
+      "ownerQuality": 0.85,
+      "ownerSize": 16300
+    },
+    {
+      "name": "jpeg photo",
+      "ownerAttempts": 7,
+      "secantAttempts": 8,
+      "modelAttempts": 7,
+      "same": true,
+      "milliseconds": 378.08905500000003,
+      "ownerQuality": 0.93,
+      "ownerSize": 4375
+    },
+    {
+      "name": "jpeg noise",
+      "ownerAttempts": 15,
+      "secantAttempts": 8,
+      "modelAttempts": 8,
+      "same": true,
+      "milliseconds": 1797.0942089999999,
+      "ownerQuality": 0.85,
+      "ownerSize": 23312
+    },
+    {
+      "name": "jpeg manga",
+      "ownerAttempts": 14,
+      "secantAttempts": 9,
+      "modelAttempts": 8,
+      "same": true,
+      "milliseconds": 827.656884,
+      "ownerQuality": 0.86,
+      "ownerSize": 17755
+    },
+    {
+      "name": "jpeg UI",
+      "ownerAttempts": 5,
+      "secantAttempts": 9,
+      "modelAttempts": 6,
+      "same": true,
+      "milliseconds": 369.30194500000016,
+      "ownerQuality": 0.95,
+      "ownerSize": 10714
+    },
+    {
+      "name": "jpeg moire",
+      "ownerAttempts": 11,
+      "secantAttempts": 8,
+      "modelAttempts": 6,
+      "same": true,
+      "milliseconds": 881.337861,
+      "ownerQuality": 0.89,
+      "ownerSize": 21726
+    },
+    {
+      "name": "jpeg panorama",
+      "ownerAttempts": 5,
+      "secantAttempts": 9,
+      "modelAttempts": 6,
+      "same": true,
+      "milliseconds": 354.0189700000001,
+      "ownerQuality": 0.95,
+      "ownerSize": 4215
+    },
+    {
+      "name": "jpeg tall document",
+      "ownerAttempts": 19,
+      "secantAttempts": 8,
+      "modelAttempts": 8,
+      "same": true,
+      "milliseconds": 753.2064259999997,
+      "ownerQuality": 0.81,
+      "ownerSize": 9962
+    },
+    {
+      "name": "webp alpha",
+      "ownerAttempts": 50,
+      "secantAttempts": 2,
+      "modelAttempts": 2,
+      "same": true,
+      "milliseconds": 727.103357
+    },
+    {
+      "name": "webp gradient",
+      "ownerAttempts": 12,
+      "secantAttempts": 8,
+      "modelAttempts": 7,
+      "same": true,
+      "milliseconds": 125.03165200000058,
+      "ownerQuality": 0.88,
+      "ownerSize": 1156
+    },
+    {
+      "name": "fake photo palette-free",
+      "ownerAttempts": 14,
+      "secantAttempts": 9,
+      "modelAttempts": 8,
+      "same": true,
+      "milliseconds": 5.5486640000008265,
+      "ownerQuality": 0.86,
+      "ownerSize": 27500
+    }
+  ],
+  "quantizerCases": [
+    {
+      "frame": "photo 256",
+      "algorithm": "wuquant",
+      "milliseconds": 713.9116970000005,
+      "mae": 7.1260528564453125,
+      "blockSsim": 0.8433225324449699,
+      "pngSize": 2930,
+      "jpegSize": 5088
+    },
+    {
+      "frame": "photo 256",
+      "algorithm": "fast-median-cut",
+      "milliseconds": 231.78692899999987,
+      "mae": 6.914967854817708,
+      "blockSsim": 0.8585562196553382,
+      "pngSize": 1662,
+      "jpegSize": 4479
+    },
+    {
+      "frame": "noise 256",
+      "algorithm": "wuquant",
+      "milliseconds": 1071.856721,
+      "mae": 0.044972737630208336,
+      "blockSsim": 0.9999764616879158,
+      "pngSize": 6959,
+      "jpegSize": 34611
+    },
+    {
+      "frame": "noise 256",
+      "algorithm": "fast-median-cut",
+      "milliseconds": 23.703115999998772,
+      "mae": 0.24648030598958334,
+      "blockSsim": 0.999585164660048,
+      "pngSize": 6143,
+      "jpegSize": 34591
+    },
+    {
+      "frame": "manga 256",
+      "algorithm": "wuquant",
+      "milliseconds": 813.1095609999993,
+      "mae": 0,
+      "blockSsim": 1,
+      "pngSize": 146,
+      "jpegSize": 10679
+    },
+    {
+      "frame": "manga 256",
+      "algorithm": "fast-median-cut",
+      "milliseconds": 15.277434000001449,
+      "mae": 0,
+      "blockSsim": 1,
+      "pngSize": 146,
+      "jpegSize": 10679
+    },
+    {
+      "frame": "UI 320×240",
+      "algorithm": "wuquant",
+      "milliseconds": 756.2958190000008,
+      "mae": 0,
+      "blockSsim": 1,
+      "pngSize": 371,
+      "jpegSize": 4834
+    },
+    {
+      "frame": "UI 320×240",
+      "algorithm": "fast-median-cut",
+      "milliseconds": 12.754128000000492,
+      "mae": 0,
+      "blockSsim": 1,
+      "pngSize": 371,
+      "jpegSize": 4834
+    },
+    {
+      "frame": "alpha 256",
+      "algorithm": "wuquant",
+      "milliseconds": 636.3605630000002,
+      "mae": 0,
+      "blockSsim": 1,
+      "pngSize": 787,
+      "jpegSize": 3850
+    },
+    {
+      "frame": "alpha 256",
+      "algorithm": "fast-median-cut",
+      "milliseconds": 4.374529000000621,
+      "mae": 0,
+      "blockSsim": 1,
+      "pngSize": 787,
+      "jpegSize": 3850
+    }
+  ],
+  "sizeModel": {
+    "mismatches": 0,
+    "medianGain": 0.1111111111111111,
+    "p95Ratio": 1.375,
+    "pass": false
+  },
+  "finalRssBytes": 305614848
+}
